@@ -938,10 +938,12 @@ function home(){
   ${tile("startHot()","🎯","Hot-topic drill","必考题冲刺",hotN+" questions on topics that keep coming out",hotN+" 题,常考题型")}
   ${tile("startWrong()","↺","Redo my wrong answers","重做错题",wn?wn+" waiting — the last push":"Nothing yet. Wrong answers collect here.",wn?wn+" 题待重做 — 最后冲刺":"暂时没有。答错的题会自动收集在这里。")}
   ${tile("hot(0)","🔥","Hot topics flashcards","必考重点卡",HOT.length+" cards to memorise",HOT.length+" 张记忆卡")}
+  ${tile("openRead('all')","📖","Read all Q&A","题目答案一览","Scroll all "+Q.length+" questions with answers, like a past-year PDF","上下滑动看全部 "+Q.length+" 题及答案,像历年考题 PDF")}
   ${tile("tips()","💡","How to pass","考试攻略","Question mix and study plan","题型比例和读书计划")}
   <h2>${bi("Past year papers","历年考题")}</h2>${src("Y24","24")}${src("P1","1")}${src("P2","2")}${src("P3","3")}
   <h2>${bi("Textbook questions","课本练习题")}</h2>${src("PA","A")}${src("PC","C")}${src("IL","IL")}${src("TIP","✓")}
   <h2>${bi("Practise by topic","按主题练习")}</h2><div class="chips">${Object.keys(T).map(k=>`<button class="chip" onclick="startTopic('${k}')">${bl(T[k])} (${Q.filter(q=>q[1]===k).length})</button>`).join("")}</div>
+  <h2>${bi("Read the textbooks","阅读课本")}</h2>${BOOKS.map(b=>b[2]?`<a class="tile" href="${esc(b[2])}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><span class="ic">📘</span><span><b>${bi(b[0],b[1])}</b><small>${bi("Open the textbook","打开课本")}</small></span></a>`:`<div class="tile" style="opacity:.6"><span class="ic">📘</span><span><b>${bi(b[0],b[1])}</b><small>${bi("Coming soon","即将提供")}</small></span></div>`).join("")}
   <p class="muted" style="margin-top:28px">${bi("Progress is saved on this phone only.","进度只保存在这部手机。")} <button class="chip" style="padding:6px 12px;font-size:14px" onclick="if(confirm('${plain("Clear all progress on this device?","清除这部手机上的所有进度?")}')){st.done={};st.wrong={};save();home()}">${bi("Reset progress","重设进度")}</button></p>`;
 }
 function begin(list,title){if(!list.length){home();return}run={list,title,i:0,picks:[],t0:Date.now()};show()}
@@ -984,6 +986,35 @@ function tips(){
   <p class="muted">${bi("Based on our advisors’ exam experience.","根据团队顾问的考试经验。")}</p>
   <h2>${bi("Study plan","读书计划")}</h2><ol class="steps">${steps.map(s=>`<li><b>${bi(s[0],s[1])}</b> ${bi(s[2],s[3])}</li>`).join("")}</ol>`;
 }
+// textbook links: [English name, Chinese name, link]. Empty link shows "Coming soon".
+const BOOKS=[["PCEIA Part A textbook","PCEIA A 部课本",""],["PCEIA Part C textbook","PCEIA C 部课本",""],["CEILLI textbook","CEILLI 课本",""]];
+// Read all Q&A: one long scrollable list with answers shown
+let rd={src:"all",hide:false};
+function openRead(k){rd.src=k;readAll();window.scrollTo(0,0)}
+function readAll(){
+  cur=readAll;
+  const srcs=["all","Y24","P1","P2","P3","PA","PC","IL","TIP"];
+  const list=ids.filter(i=>rd.src==="all"||Q[i][0]===rd.src);
+  const chip=k=>`<button class="chip" aria-pressed="${rd.src===k}" style="${rd.src===k?"background:var(--green);color:var(--onGreen);border-color:var(--green)":""}" onclick="openRead('${k}')">${esc(({all:plain("All","全部"),Y24:"2024",P1:plain("Past #1","历年 #1"),P2:plain("Past #2","历年 #2"),P3:plain("Past #3","历年 #3"),PA:"PCEIA A",PC:"PCEIA C",IL:"CEILLI",TIP:plain("Tips","提示")})[k])}</button>`;
+  const item=(qi,n)=>{const q=Q[qi],z=ZH[qi],a="abcd".indexOf(q[4]);
+    return `<div class="rev qa" data-t="${esc((q[2]+" "+q[3].join(" ")+" "+z[0]+" "+(z[1]?z[1].join(" "):"")+" "+q[5]+" "+z[2]).toLowerCase())}"><div class="tag" style="margin-top:0">${n+1}. ${bl(S[q[0]])}</div>
+    <div style="font-weight:600">${bi(q[2],z[0])}</div>
+    <div class="ra-opts">${q[3].map((o,k)=>`<div class="ra-o${k===a?" ok":""}"><b>${L[k]}.</b> <span>${optText(qi,k)}</span>${k===a?" ✓":""}</div>`).join("")}</div>
+    <div class="ra-ex"><div class="a">${bi("Answer","答案")} ${L[a]}</div><div class="muted">${bi(q[5],z[2])}</div>${q[6]?`<div class="note">⚠ ${bi(q[6],z[3])}</div>`:""}</div>
+    <button class="chip ra-show" style="margin-top:8px;padding:6px 14px;font-size:15px" onclick="this.closest('.qa').classList.add('open')">${bi("Show answer","显示答案")}</button></div>`};
+  app.innerHTML=`<style>.ra-o{padding:6px 10px;border-radius:10px;margin-top:6px}.ra-o.ok{background:var(--green2);color:var(--green);font-weight:700}.ra-show{display:none}
+  .hide .qa:not(.open) .ra-o.ok{background:none;color:inherit;font-weight:400}.hide .qa:not(.open) .ra-ex{display:none}.hide .qa:not(.open) .ra-show{display:inline-block}.hide .qa:not(.open) .ra-o.ok::after{content:""}
+  .ra-search{width:100%;font:inherit;font-size:17px;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);margin-top:10px}</style>
+  <div class="bar"><div class="barrow"><button class="x" onclick="home()">← ${bi("Home","主页")}</button><span class="count">${list.length} ${bi("questions","题")}</span></div></div>${langBar("in")}
+  <h2 style="margin-top:18px">${bi("Read all Q&A","题目答案一览")}</h2>
+  <div class="chips">${srcs.map(chip).join("")}</div>
+  <div class="chips" style="margin-top:10px"><button class="chip" onclick="rd.hide=!rd.hide;readAll()" style="${rd.hide?"background:var(--gold);color:#fff;border-color:var(--gold)":""}">${rd.hide?bi("Answers hidden — tap to show all","答案已隐藏 — 点击全部显示"):bi("Hide answers (test myself)","隐藏答案(自我测试)")}</button></div>
+  <input class="ra-search" type="search" placeholder="${esc(plain("Search a word, e.g. free-look","搜索关键词,例如 冷静期"))}" oninput="raFilter(this.value)">
+  <div id="ra" class="${rd.hide?"hide":""}" style="margin-top:14px">${list.map(item).join("")}</div>
+  <p class="muted" id="ra-none" hidden>${bi("No questions match.","没有符合的题目。")}</p>
+  <div class="dock"><button onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ ${plain("Back to top","回到顶部")}</button></div>`;
+}
+function raFilter(v){v=v.trim().toLowerCase();let n=0;document.querySelectorAll("#ra .qa").forEach(e=>{const s=!v||e.dataset.t.includes(v);e.hidden=!s;if(s)n++});document.getElementById("ra-none").hidden=n>0}
 let hi=0;
 function hot(i){
   const n=HOT.length;hi=((i%n)+n)%n;cur=()=>hot(hi);const h=HOT[hi];window.scrollTo(0,0);
