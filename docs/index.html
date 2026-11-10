@@ -943,7 +943,7 @@ function home(){
   <h2>${bi("Past year papers","历年考题")}</h2>${src("Y24","24")}${src("P1","1")}${src("P2","2")}${src("P3","3")}
   <h2>${bi("Textbook questions","课本练习题")}</h2>${src("PA","A")}${src("PC","C")}${src("IL","IL")}${src("TIP","✓")}
   <h2>${bi("Practise by topic","按主题练习")}</h2><div class="chips">${Object.keys(T).map(k=>`<button class="chip" onclick="startTopic('${k}')">${bl(T[k])} (${Q.filter(q=>q[1]===k).length})</button>`).join("")}</div>
-  <h2>${bi("Read the textbooks","阅读课本")}</h2>${BOOKS.map(b=>b[2]?`<a class="tile" href="${esc(b[2])}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><span class="ic">📘</span><span><b>${bi(b[0],b[1])}</b><small>${bi("Open the textbook","打开课本")}</small></span></a>`:`<div class="tile" style="opacity:.6"><span class="ic">📘</span><span><b>${bi(b[0],b[1])}</b><small>${bi("Coming soon","即将提供")}</small></span></div>`).join("")}
+  <h2>${bi("Read the textbooks","阅读课本")}</h2><p class="muted" style="margin-top:-4px">${bi("Sign in with the Google account your leader added. No access? Ask your leader.","请用领导已添加的 Google 账号登录。打不开?请联系你的领导。")}</p>${BOOKS.map(b=>b[2]?`<a class="tile" href="${esc(b[2])}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><span class="ic">📘</span><span><b>${bi(b[0],b[1])}</b><small>${bi("Google Drive · team only","Google Drive · 仅限团队")}</small></span></a>`:`<div class="tile" style="opacity:.6"><span class="ic">📘</span><span><b>${bi(b[0],b[1])}</b><small>${bi("Coming soon","即将提供")}</small></span></div>`).join("")}
   <p class="muted" style="margin-top:28px">${bi("Progress is saved on this phone only.","进度只保存在这部手机。")} <button class="chip" style="padding:6px 12px;font-size:14px" onclick="if(confirm('${plain("Clear all progress on this device?","清除这部手机上的所有进度?")}')){st.done={};st.wrong={};save();home()}">${bi("Reset progress","重设进度")}</button></p>`;
 }
 function begin(list,title){if(!list.length){home();return}run={list,title,i:0,picks:[],t0:Date.now()};show()}
@@ -987,7 +987,7 @@ function tips(){
   <h2>${bi("Study plan","读书计划")}</h2><ol class="steps">${steps.map(s=>`<li><b>${bi(s[0],s[1])}</b> ${bi(s[2],s[3])}</li>`).join("")}</ol>`;
 }
 // textbook links: [English name, Chinese name, link]. Empty link shows "Coming soon".
-const BOOKS=[["PCEIA Part A textbook","PCEIA A 部课本",""],["PCEIA Part C textbook","PCEIA C 部课本",""],["CEILLI textbook","CEILLI 课本",""]];
+const BOOKS=[["PCEIA Part A textbook (10th ed)","PCEIA A 部课本(第10版)","https://drive.google.com/file/d/1CxTvBTayGmHCSVtvRxVbHbwBV2lFKbgd/view"],["PCEIA Part C textbook (10th ed)","PCEIA C 部课本(第10版)","https://drive.google.com/file/d/1dmZhEj_zK_TgDwBWvF4ONns758J3BWpH/view"],["CEILLI textbook (8th ed)","CEILLI 课本(第8版)","https://drive.google.com/file/d/1rOFgPrVhXnORbAKTCi4Imdv4QJabClvP/view"]];
 // Read all Q&A: one long scrollable list with answers shown
 let rd={src:"all",hide:false};
 function openRead(k){rd.src=k;readAll();window.scrollTo(0,0)}
