@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PCIL Exam Portal V2</title>
+<meta name="theme-color" content="#006039">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PCIL Exam">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF3F0;--card:#FFFFFF;--ink:#0E2A1E;--soft:#4E6659;--line:#D3DED7;--green:#006039;--green2:#E1EEE7;--gold:#A37E2C;--gold2:#F6EDD8;--bad:#B3261E;--bad2:#FBE6E4;--onGreen:#FFFFFF;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#08170F;--card:#10261B;--ink:#E6EFE9;--soft:#9DB5A7;--line:#22402F;--green:#2FA36B;--green2:#123323;--gold:#D9B45E;--gold2:#2E2612;--bad:#F08A80;--bad2:#3A1714;--onGreen:#04140B;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#08170F;--card:#10261B;--ink:#E6EFE9;--soft:#9DB5A7;--line:#22402F;--green:#2FA36B;--green2:#123323;--gold:#D9B45E;--gold2:#2E2612;--bad:#F08A80;--bad2:#3A1714;--onGreen:#04140B;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans","Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;font-size:18px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--green)}
+.wrap{max-width:680px;margin:0 auto;padding:0 18px 120px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.mast{background:var(--green);color:#fff;padding:26px 22px 30px;border-radius:0 0 28px 28px;margin:0 -18px 22px}
+.mast h1{margin:0;font-size:34px;line-height:1.1;font-weight:800;letter-spacing:-.02em}
+.mast p{margin:8px 0 0;font-size:17px;opacity:.85}
+.mast .brand{color:#E9CF8F;font-weight:700;font-size:15px;margin:0 0 10px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}
+.stat{background:rgba(255,255,255,.1);border-radius:16px;padding:12px}
+.stat b{display:block;font-size:28px;line-height:1.1}
+.stat span{font-size:14px;opacity:.85}
+h2{font-size:22px;margin:28px 0 12px;font-weight:800}
+.tile{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin-bottom:10px}
+.tile .ic{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:var(--green2)}
+.tile b{display:block;font-size:19px}
+.tile small{color:var(--soft);font-size:15px}
+.tile.hero{background:var(--gold2);border-color:var(--gold)}
+.tile.hero .ic{background:var(--gold);color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:10px 16px;font-size:16px;font-weight:600}
+/* quiz */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:12px 0 10px;margin-bottom:6px}
+.barrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.x{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-size:16px;font-weight:600}
+.count{font-weight:800;font-size:18px}
+.track{height:8px;background:var(--line);border-radius:8px;margin-top:10px;overflow:hidden}
+.track i{display:block;height:100%;background:var(--green);border-radius:8px;transition:width .25s}
+.tag{display:inline-block;font-size:14px;font-weight:700;color:var(--gold);margin:10px 0 6px}
+.stem{font-size:21px;font-weight:600;line-height:1.45;margin:0 0 18px;white-space:pre-line}
+.opt{display:flex;gap:14px;align-items:flex-start;width:100%;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px;font-size:19px;line-height:1.4}
+.bub{flex:none;width:36px;height:36px;border-radius:50%;border:2px solid var(--soft);display:grid;place-items:center;font-weight:800;font-size:17px;color:var(--soft)}
+.opt.right{border-color:var(--green);background:var(--green2)}
+.opt.right .bub{background:var(--green);border-color:var(--green);color:var(--onGreen)}
+.opt.wrong{border-color:var(--bad);background:var(--bad2)}
+.opt.wrong .bub{background:var(--bad);border-color:var(--bad);color:#fff}
+.opt:disabled{cursor:default}
+.fb{border-radius:16px;padding:16px 18px;margin:6px 0 10px;font-size:18px;border-left:6px solid var(--green);background:var(--card)}
+.fb.no{border-left-color:var(--bad)}
+.fb h3{margin:0 0 6px;font-size:20px}
+.note{margin-top:10px;padding:12px 14px;border-radius:12px;background:var(--gold2);font-size:16px}
+.dock{position:fixed;left:0;right:0;bottom:0;padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,var(--bg) 30%)}
+.dock button{display:block;width:100%;max-width:644px;margin:0 auto;background:var(--green);color:var(--onGreen);border:0;border-radius:16px;padding:17px;font-size:19px;font-weight:800}
+.dock button:disabled{opacity:.35}
+/* result */
+.score{text-align:center;padding:30px 10px 10px}
+.score .big{font-size:76px;font-weight:800;line-height:1;color:var(--green)}
+.score p{color:var(--soft);margin:8px 0 0}
+.rev{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px;font-size:17px}
+.rev .a{color:var(--green);font-weight:700;margin-top:6px}
+.rev .y{color:var(--bad);font-weight:600}
+/* tips */
+.w{margin-bottom:14px}
+.w .lab{display:flex;justify-content:space-between;font-weight:700;font-size:17px;margin-bottom:5px}
+.w .t{height:22px;background:var(--line);border-radius:8px;overflow:hidden}
+.w .t i{display:block;height:100%;background:var(--green)}
+.w:first-child .t i{background:var(--gold)}
+.steps{counter-reset:s;padding:0;list-style:none}
+.steps li{counter-increment:s;position:relative;padding:14px 16px 14px 60px;background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:10px}
+.steps li::before{content:counter(s);position:absolute;left:14px;top:12px;width:32px;height:32px;border-radius:50%;background:var(--gold);color:#fff;font-weight:800;display:grid;place-items:center}
+/* flash */
+.card{background:var(--card);border:2px solid var(--gold);border-radius:22px;padding:28px 22px;min-height:280px;display:flex;flex-direction:column;justify-content:center;text-align:center;width:100%}
+.card .f{font-size:28px;font-weight:800;line-height:1.3}
+.card .b{font-size:20px;line-height:1.55;margin-top:14px}
+.card .h{color:var(--soft);font-size:15px;margin-top:18px}
+.pair{display:flex;gap:10px;margin-top:14px}
+.pair button{flex:1;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;font-weight:700;font-size:17px}
+.muted{color:var(--soft);font-size:16px}
+.empty{background:var(--card);border:1px dashed var(--line);border-radius:16px;padding:22px;text-align:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.zh{display:block;color:var(--soft);font-size:.9em;margin-top:4px;font-weight:500}
+.stem .zh{font-size:19px;color:var(--ink);opacity:.8;margin-top:8px}
+.lang{display:flex;gap:6px;margin-top:16px}
+.lang button{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:7px 14px;font-size:15px;font-weight:700}
+.lang button[aria-pressed="true"]{background:#E9CF8F;color:#0E2A1E;border-color:#E9CF8F}
+.lang.in button{background:var(--card);color:var(--ink);border-color:var(--line)}
+.lang.in button[aria-pressed="true"]{background:var(--gold);color:#fff;border-color:var(--gold)}
+.fb p{margin:0}.fb p+p{margin-top:6px}
+.sure{background:var(--gold2);border:1px solid var(--gold);border-radius:16px;padding:14px 16px;font-size:17px}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+const S={Y24:["2024 PCIL Past Year","2024 历年考题"],P1:["PCIL Past Year #1","历年考题 #1"],P2:["PCIL Past Year #2","历年考题 #2"],P3:["PCIL Past Year #3","历年考题 #3"],PA:["PCEIA Part A textbook","PCEIA A 部课本"],PC:["PCEIA Part C textbook","PCEIA C 部课本"],IL:["CEILLI textbook","CEILLI 课本"],TIP:["Team tips","团队提示"]};
+const T={L:["Life policy","人寿保单"],P:["Insurance principles","保险原则"],R:["Law & ethics","法律与道德"],M:["Medical & health","医疗与健康"],I:["ILP & investment","投资联结与投资"],C:["Calculation","计算题"]};
+const Q=[
+["P1","L","The objective of life insurance is ____.",["Make profit from insurance claims","Help insurance companies grow","To provide financial security against the uncertainty of losses","Avoid losses arising from accident"],"c","Insurance gives financial security against uncertain loss — never a way to profit."],
+["P1","M","Under the Guidelines on Medical and Health Insurance Business, cost-sharing is not mandatory and, where applicable, is limited to the lower of ____ (excluding deductibles) or ____ (inclusive of deductibles) per claim.",["20%, RM3,000","20%, RM5,000","30%, RM3,000","30%, RM5,000"],"a","Remember: 20% or RM3,000, whichever is lower."],
+["P1","L","Conversion from term insurance to permanent life insurance is subject to ____.",["Premium affected on attained age or original age basis","Insured continues to pay the same premium","Premium must be paid on a single premium basis","Premium rate review on conversion"],"d","Past-year key: premium rate is reviewed on conversion."],
+["P1","L","A ____ is applied in almost all ordinary life contracts, with premiums constant throughout the insurance period.",["Level payment system","Level premium system","Constant premium system","Uniform payment system"],"b","Same premium every year despite rising mortality = level premium system."],
+["P1","R","PIDM complements BNM’s prudential role by ____.",["Providing a safety net for depositors and policy owners in the event of insolvency","Protecting consumers against unscrupulous agents","Providing immediate resolution to complaints","Protecting insurers against financial losses"],"a","PIDM = safety net if a member institution fails."],
+["P1","L","Relevant sources of information for life underwriting: I. Proposal form II. Medical examiner’s report III. Agent’s report IV. Attending physician’s statement",["I, II, III","I, II, IV","I, III, IV","I, II, III, IV"],"a","Past-year key: proposal form, medical examiner’s report and agent’s report."],
+["P1","R","Prohibited business conduct: I. Persuading a consumer to conceal or make material facts ambiguous II. Offering to act for an insurer in negotiating a policy III. Misleading statement, illustration, forecast or comparison IV. Any act for an insurer on issuance/renewal of a policy",["I, II","I, III","I, IV","II, III, IV"],"b","II and IV describe what an agent normally does — not prohibited."],
+["P1","L","A life insurer shall not void a life policy or refuse a claim by reason only of ____.",["Misstatement of age","Misrepresentation of condition of health","Misrepresentation of medical history","Non-disclosure of hazardous hobbies"],"a","Wrong age is corrected by adjusting premium or sum assured, not by voiding."],
+["P1","L","The charge for covering the cost of mortality and interest is called ____ premium.",["Gross","Net","Risk","Written"],"b","Net = mortality + interest. Gross = net + expenses and profit loading."],
+["P1","P","Pure risks are insurable ____.",["Because there is no possibility of a loss","Because of the need to maintain the principle of indemnity","Because insurers prefer good risks only","Because of the principle of utmost good faith"],"b","Past-year key: indemnity restores you to your position — no gain possible with pure risk."],
+["P1","L","A regular premium policy acquires surrender value if premiums have been paid continuously for ____ years.",["2","3","4","5"],"b","Past-year answer: 3 years.","10th-edition textbook wording: a policy owner may surrender any time after inception if the policy provides a surrender value. Know both."],
+["P1","L","Which of the following will NOT be charged extra premium?",["Blasters","Underground mine workers","Clerks","Deep sea divers"],"c","Clerks have no occupational hazard."],
+["P1","L","The 3 types of life claims are: I. Supplementary contract claims II. Performance claims III. Death claims IV. Maturity claims",["I, II, III","I, II, IV","I, III, IV","II, III, IV"],"c","There’s no such thing as a 'performance claim'."],
+["P1","L","Assignment is the mechanism to transfer the ____ of an insured to another person.",["Rights","Liabilities","Insurable interest","Rights and liabilities"],"d","Assignment transfers both rights and liabilities."],
+["P1","P","What is the main reason why people buy insurance?",["To profit from claims","Worry about the effects of misfortune","To claim tax deductions","Feel obliged to the agent"],"b","People buy for peace of mind against misfortune."],
+["P1","L","The policy states that the proposal and declaration shall be the basis of the contract. This section is the ____.",["Representation clause","Recital clause","Operative clause","Attestation clause"],"b","Recital clause links the proposal and declaration to the contract."],
+["P1","P","Caveat emptor means ____.",["Let the seller beware","Let the buyer beware","Utmost good faith","Representation"],"b","Ordinary contracts = buyer beware. Insurance = utmost good faith instead."],
+["P1","L","____ bonus is only paid on policies resulting in maturity or death claims, if kept fully in force.",["Terminal","Interim","Special","Simple"],"a","Terminal bonus = paid only at the end (maturity or death)."],
+["P1","L","If there is misrepresentation of age, which measure will be taken?",["If true age is greater, vary the sum assured and bonuses in proportion to premiums paid and the true age","Policy cancelled, no refund","Policy cancelled, premiums refunded","If age understated, pay premium on true age with interest"],"a","Older than stated → sum assured is scaled down."],
+["P1","I","The switching facility in ILPs enables ____.",["Insurer to switch SP plan to RP plan","Insurer to switch ILP to traditional endowment","Policy owners to switch to another insurer’s policy","Policy owners to switch part or all investment from one fund to another"],"d","Switching = moving money between funds inside the same ILP."],
+["P1","R","If the group policy owner has no insurable interest in the persons insured, the insurer pays policy monies directly to ____.",["Nominee","Administrator","Insured persons","Employer"],"c","No insurable interest → money goes straight to the insured persons."],
+["P1","L","Two non-forfeiture options: I. Paid-up, no further premiums, reduced sum assured II. Shorten term, full sum assured III. Paid-up but keep paying, reduced sum assured IV. Shorten term and increase sum assured",["I, II","I, III","I, IV","I, II, III"],"a","Reduced paid-up (I) or extended term (II)."],
+["P1","I","Under the ILP guidelines, valuation of units shall be carried out every ____.",["Business day","Week","Business week","Day"],"a","Units are valued every business day."],
+["P1","P","The schedule of a fire policy does NOT include:",["Name of insurer, period of insurance","Name and address of insured, premium","Occupation, location of property","Details of claims, conditions and procedures"],"d","Claims details and conditions sit in the policy wording, not the schedule."],
+["P1","R","The agent should explain: I. Extra charges and their purpose II. Other policies with the lowest premiums in the market III. Restrictions, limitations and exclusions IV. Scope of cover, terms and conditions",["III, IV","I, II, III","I, III, IV","II, III, IV"],"c","Agents don’t need to list competitors' cheapest premiums."],
+["P1","R","Which is NOT a key regulatory objective of BNM for the insurance sector?",["Foster fair, responsible, professional conduct","Watch solvency and market conduct","Promote monetary and financial stability","Protect shareholders of insurers against bankruptcy"],"d","BNM protects consumers and stability — not shareholders."],
+["P1","L","When can group insurance be bought?",["Creditor on debtor’s life","Employees for their employer","Father for family members","Employer for his/her employees"],"d","Classic group insurance: employer covering employees."],
+["P1","M","The term 'deductible' in health insurance refers to ____.",["Policyholder pays a pre-agreed amount first, balance paid by insurer","Agent pays a pre-agreed amount first","Insurer pays a pre-agreed amount first","Special payment arrangements"],"a","Deductible = the first portion you pay yourself."],
+["P1","P","An insured is allowed to collect the full claim from insurers and then collect again from the person responsible for the ____.",["Liability","Indemnity","Good behavior","All the above"],"b","Past-year key: indemnity. (Concept tested: subrogation prevents double recovery.)"],
+["P1","P","____ is the legal right to insure a legitimate financial interest in a subject matter of insurance.",["Subrogation","Contribution","Insurable interest","Utmost good faith"],"c","Legal right + financial interest = insurable interest."],
+["P1","R","The customer fact-find form does NOT include:",["Customer’s risk profile","Medical history","Cash flow analysis","Life and financial priorities and goals"],"b","Medical history goes in the proposal form, not the fact-find."],
+["P1","C","Amanda, 35, bought a single premium ILP with RM50,000. Two years later she topped up RM30,000. Total sum assured after the top-up is ____.",["RM50,000","RM62,500","RM80,000","RM100,000"],"b","Past-year key: RM50,000 × 125% = RM62,500. Top-up does not raise the sum assured here."],
+["P1","R","A composite insurance company carries on ____.",["Both life and general insurance business","General insurance only","A single class","Life insurance only"],"a","Composite = life + general."],
+["P1","P","In marine insurance, insurable interest must exist at the time of ____.",["Not required","Loss","Effecting the policy only","Inception and time of loss"],"b","Marine: at time of loss. Life: at inception. Other general: both."],
+["P1","P","An insurer offers cover on different terms instead of accepting the proposal as-is. This is ____.",["Acceptance","Consideration","Consent","Counteroffer"],"d","New terms = counteroffer."],
+["P1","P","Characteristics of insurable risks exclude ____.",["Illegal and against public policy","Large number of similar risks","Insurable interest","Reasonable premium"],"a","Illegal risks can never be insured."],
+["P1","I","There is a ____ between expected return and risk in a rational environment.",["Reverse proportion","Correlation","Relationship","Trade off"],"d","Risk-return trade-off: higher return needs higher risk."],
+["P1","I","Funds invested in particular regions or industries are ____ funds.",["Bond","Balanced","Specialized","Managed"],"c","Specific sector or region = specialized fund."],
+["P1","P","Risks can be categorised as:",["Pure and fundamental","Pure and speculative","Fundamental and particular / pure and speculative","Speculative and particular"],"c","Two pairs: fundamental vs particular, pure vs speculative."],
+["P1","I","Which statement is INCORRECT about unit trusts?",["They are authorised and supervised by BNM","Useful for private investors","Useful for people without enough funds or time","Give access to diversified investments"],"a","Unit trusts are not supervised by BNM — hence incorrect."],
+["P1","I","Types of real estate investment do NOT include:",["Domestic property","Liquid assets","Commercial property","Agricultural property"],"b","Liquid assets aren’t real estate."],
+["P1","I","What is important before any investment decision?",["Cash flow analysis","Net worth analysis","Cash flow and net worth analysis","Personal budget and cash flow"],"c","Do both: cash flow and net worth."],
+["P1","I","The initial offer period of a new fund shall not exceed ____ months.",["Two","Four","Three","One"],"a","Max 2 months."],
+["P1","I","Investment-linked insurance provides ____.",["Investment in properties","Investment in human life","Life coverage and investment return","Life insurance"],"c","ILP = protection + investment."],
+["P1","L","A life insurer may reject or delay a claim on the basis of ____.",["Claim reported after the time limit","Non-disclosure or misrepresentation","Late submission of documents","Non-payment of claim processing fees"],"b","Only valid ground listed: non-disclosure/misrepresentation."],
+["P1","L","Which is payable only on maturity or death claim?",["Policy dividend","Interim bonus","Terminal bonus","Cash bonus"],"c","Terminal bonus = only at the end."],
+["P1","I","Which is guaranteed under an investment-linked policy?",["Annual investment income","Fixed value of units","Investment under property fund","The sum assured"],"d","Only the sum assured is guaranteed; unit values move."],
+["P1","R","Underlying principles of the code of ethics: I. Avoid conflicts of interest II. Avoid misuse of position III. Prevent misuse of information IV. Prevent competition between agents",["I, II and III","I and IV","I, II and IV","I, II, III, IV"],"a","Preventing competition is not an ethics principle."],
+["P1","R","Which statement is NOT true for implied actual authority?",["Acting in good faith and interpreting express instructions reasonably","Doing anything incidental to express instructions","Acts usually performed by persons in the agent’s position","Acts usual in a particular trade"],"a","Past-year key: (a)."],
+["P1","C","Emily withdraws RM2,000 from her 10,000 units. Unit price is RM2. How many units remain?",["1,000","8,947","9,000","10,543"],"c","RM2,000 ÷ RM2 = 1,000 units. 10,000 − 1,000 = 9,000."],
+["P2","L","To contest the validity of a life contract, an insurer must prove ____.",["False information","Inaccurate underwriting information","Erroneous statement of facts","Concealment of material facts"],"d","Material facts concealed = ground to contest."],
+["P2","L","'Where a life contract has been in effect for more than two years… shall not be avoided… unless the statement was material and fraudulently made.' This refers to ____.",["The proviso","Suicide clause","Operative clause","Non-contestability clause"],"d","2-year rule = non-contestability."],
+["P2","L","Which is NOT a method of distributing divisible surplus?",["Non-par maturity claim","Cash bonus","Guarantee bonus","Interim bonus"],"a","Non-par policies don’t share in surplus."],
+["P2","L","When assets of the insurance fund exceed liabilities, there is ____.",["Liability","Surplus","Assets","Market value"],"b","Assets > liabilities = surplus."],
+["P2","L","After 2 years in force, a life contract shall not be avoided on the following grounds EXCEPT ____.",["A pre-existing health condition not disclosed","A statement omitted in the medical report","A careless misrepresentation of age","A statement omitted in the proposal form"],"a","Past-year #2 key: (a).","The same question in Past Year #3 is keyed (b). Sources conflict — confirm with your trainer."],
+["P2","L","On election for a paid-up policy, the policy stays in force for the full sum insured until ____.",["Policy owner surrenders","Next premium on the new policy is due","Next premium on the original policy is due","Policy owner retires"],"c","Full cover runs until the next original premium due date."],
+["P2","L","What do policyholders lose if they surrender a life policy?",["Only death cover","Three quarters of savings","Half the cash value","All benefits including life protection"],"d","Surrender ends the contract — all benefits gone."],
+["P2","L","The life insurer refunds overpayment to the insured ____.",["If the insurer makes more profit","If insured proves more profit","If real age is less than stated","If insured is healthier now"],"c","Younger than stated → premium was too high → refund."],
+["P2","M","With additional premium, an HSI policy can be extended to these benefits EXCEPT ____.",["Organ transplant","Accidental death benefit","Cosmetic surgery","Insured child’s daily guardian allowance"],"c","Cosmetic surgery is excluded."],
+["P2","M","For HSI policies not renewed or deferred, the insurer must notify the policy owner ____.",["At least 60 days after anniversary","At least 30 days before expiry","At least 60 days upon expiry","At least 30 days before the policy anniversary date"],"d","30 days before anniversary."],
+["P2","M","Which is NOT a benefit limitation in medical and health coverage?",["Reducing benefit payable","Shortening disability income period","Larger deductible","Option to reduce coverage at the time of a claim"],"d","Benefit limitations are set at underwriting, not chosen at claim."],
+["P2","R","If the group policy owner has no ____ in the persons insured, the insurer must give each insured person details of cover, rights and obligations.",["Utmost good faith","Insurable interest","Contractual capacity","Personal interest"],"b","No insurable interest → insurer informs insured persons directly."],
+["P2","M","MHI in Malaysia is written by both life and general insurers as a ____.",["Stand-alone policy","Rider to a life policy","Supplementary cover","Health benefit package"],"a","Past-year key: stand-alone policy."],
+["P2","M","An important underwriting factor for a medical and health proposal:",["Age","Hobbies","Marital status","Education level"],"a","Age drives health risk."],
+["P2","M","____ mainly cater for employer healthcare benefits, part of remuneration.",["Group PA","Group term life","Group retirement savings","Group medical and health insurance"],"d","Employer healthcare = group medical."],
+["P2","R","If an agent misappropriates money, the principal may rescind any contract made through the agent and ____ commission.",["Refuse","Increase","Pay","Reduce"],"a","Principal can refuse commission."],
+["P2","R","Without instructions on a point, an agent may follow ____ where the practice is clear.",["Market usage","Legal usage","Customary practice","Market agreement"],"a","Follow market usage.","The 2024 past-year paper (Q54) keys the same question as 'customary practice'. Sources conflict — recognise both."],
+["P2","R","____ lists prohibited business conduct applying to insurers and intermediaries including agents.",["Schedule 10 FSA 2013","Schedule 11 FSA 2013","Schedule 7 FSA 2013","Schedule 8 FSA 2013"],"c","Schedule 7 = prohibited business conduct."],
+["P2","P","Policy terms and conditions exist so that ____.",["Insured can buy back excluded perils","Parties understand their duties, rights and obligations","Insured understands cover limits","To exclude war and terrorism"],"b","T&Cs set out each party’s duties and rights."],
+["P2","P","The ____ makes an offer by submitting a completed, signed proposal form.",["Agent","Finance company","Proposer","Broker"],"c","Proposer makes the offer."],
+["P2","P","A contract with no 'consensus ad idem' or a fundamental mistake from the start is ____.",["Unenforceable","Void","Voidable","Ineffective"],"b","No meeting of minds = void."],
+["P2","P","Which is NOT essential for a valid contract?",["Nomination of intermediary","Consideration","Offer and acceptance","Capacity to contract"],"a","Intermediary isn’t a contract element."],
+["P2","R","Under AML/CFT Customer Due Diligence, insurers must ____.",["Verify identity of customer or beneficial owner through reliable documents","Implement risk management","Report cash over RM50,000 to BNM","Report suspicious transactions to BNM"],"a","CDD = verify identity."],
+["P2","R","Which is NOT covered by PIDM?",["Islamic banks","Commercial banks","Reinsurance companies","Takaful companies"],"c","Reinsurers aren’t PIDM members."],
+["P2","R","Which provides for regulation and supervision of financial institutions?",["Central Bank of Malaysia Act 2009","Companies Act 1965","MDIC Act 2005","Financial Services Act 2013"],"d","FSA 2013."],
+["P2","R","The objective of TIPS is ____.",["Protect insurers from bankruptcy","Protect against unscrupulous agents","Protect policy owners from losing eligible benefits if an insurer member fails","Protect from recession"],"c","TIPS protects policy owners if a member insurer fails."],
+["P2","R","Underlying concepts driving takaful acceptance: I. Piety II. Tabarru' III. Protect IV. Mutual assistance",["I, II and III","I, II and IV","I, III and IV","II, III and IV"],"d","Past-year key: Tabarru', protect, mutual assistance."],
+["P2","P","Under contribution, an insurer who paid the claim can call on other insurers to ____.",["Equal share regardless of sum insured","Contribute proportionately to the indemnity","Equal share by sum insured","Ratable proportion by sum insured"],"b","Each pays its proportional share."],
+["P2","P","Which is NOT a contract of indemnity?",["Fire","Aviation","All risks","Life insurance"],"d","A life can’t be valued — life is not indemnity."],
+["P2","P","Proximate cause checks whether loss is a direct result of ____.",["Excluded peril","Insured peril","Exceptional peril","Uninsured peril"],"b","Was the dominant cause an insured peril?"],
+["P2","P","A breach of good faith by the insured results in ____.",["Void contract","Voidable contract","Unenforceable contract","Illegal contract"],"b","Breach of good faith = voidable."],
+["P2","P","A ____ policy is not a contract of indemnity.",["Liability","Medical and health","Fire","Personal accident"],"d","PA pays fixed benefits."],
+["P2","P","'The active efficient cause that sets in motion a chain of events… without intervention of a new independent force.' This is ____.",["Remote cause","Independent cause","Single cause","Proximate cause"],"d","Textbook definition of proximate cause."],
+["P2","P","Transfer of rights and liabilities of the insured to a new insured is ____.",["Assignment of policy","Transfer of interest","Transfer of policy","Assignment of policy proceeds"],"a","Assignment."],
+["P2","P","Which best describes the cost-stabilisation benefit of insurance?",["Identifies and controls risks","Meets financial consequences","Reduces frequency and severity","Releases funds for investment in the productive side"],"d","Known costs free up money for business."],
+["P2","R","Tabarru' means ____.",["Participant agrees to donate part of contribution for mutual help","Sincere intention to help","Agreement to jointly indemnify","Profit-sharing business venture"],"a","Tabarru' = donation for mutual help."],
+["P2","P","Which is NOT a pure risk but is insurable?",["Nuclear testing","Effects of inflation on the economy","Typhoon and hurricane","War"],"b","Past-year #2 key: (b).","The 2024 past-year paper (Q45) keys a similar question as 'Typhoon and hurricane'. Sources conflict — confirm with your trainer."],
+["P2","R","Insurance intermediaries refer to ____.",["Real estate agents","Trustees","Motor franchise holders","Insurance brokers, agents and financial advisers"],"d","Brokers, agents, financial advisers."],
+["P2","L","If a policy owner lapses a policy and buys a new one, ____.",["New policy rejected","Old premium transferred","Clauses not disrupted","Suicide and incontestability clauses start anew"],"d","New policy = new 1-year suicide and 2-year contestability periods."],
+["P2","R","Correct statement for an intermediary soliciting business:",["Protect insurer in conflict","Always protect insurer","Conduct business with utmost good faith and integrity","Protect own interest first"],"c","Utmost good faith and integrity."],
+["P2","R","Choose the correct statement.",["Insurer shall not collect claim processing fees","Insurer allows agent to collect fees","Insurer won’t stop agent collecting","Insurer may impose fees"],"a","No claim processing fees."],
+["P2","L","An insurer is expected ____.",["Never to reject a claim","To delay as long as they wish","Not reject a claim","Not to unreasonably reject a claim"],"d","Key word: unreasonably."],
+["P2","R","On disclosure of underwriting information, the agent shall ____.",["Encourage hiding info","Find a clinic that hides problems","Influence answers to match requirements","Avoid influencing; answers are the proposer’s own responsibility"],"d","Answers belong to the proposer."],
+["P2","R","Policy delivery strengthens the relationship and helps to ____.",["Sell another policy","Prevent complaints","Save money","Encourage persistency"],"d","Persistency."],
+["P2","R","The second step in the selling process is ____.",["Locating prospects","Sales presentation","Sales interviews","Handling objections"],"b","Past-year key: sales presentation."],
+["P2","R","Code of Ethics: I. Avoid conflict of interest II. Avoid misuse of position III. Ensure accurate records IV. Prevent misuse of information",["I, II and III","I, II and IV","II, III and IV","I, II, III and IV"],"d","All four."],
+["P2","I","ILP agents should review clients' investment progress ideally ____.",["Once a year","Once a week","Every six months","Once a month"],"a","Once a year."],
+["P2","R","Which buying stage: the consumer becomes aware of a risk or need?",["Information search","Evaluation of alternatives","Problem recognition","Purchase"],"c","Awareness = problem recognition."],
+["P2","I","The initial offer period of a new fund shall not ____.",["Be less than one month","Exceed one month","Exceed two months","Be less than two months"],"c","Not exceed 2 months."],
+["P2","I","True statement about equities:",["Returns lower in buoyant markets","Prices rise against a downturn","Steady in a downturn","Returns can be significantly higher in market buoyancy"],"d","Bull market → higher equity returns."],
+["P3","R","If an agent’s breach is fraudulent, the principal may rescind contracts and ____ commissions.",["Pay","Increase","Refuse","Reduce"],"c","Refuse commission."],
+["P3","M","An HSI policy provides ____ by the policy owner for medical treatment.",["Income for disablement","Lump sum on critical illness","Sum assured on TPD or death","Reimbursement of medical expenses incurred"],"d","HSI = reimburses medical bills."],
+["P3","M","Apart from medical and family history, an important underwriting factor for MHI:",["Marital status","Age","Education","Hobbies"],"b","Age."],
+["P3","M","The standard HSI policy covers ____.",["Kidney dialysis","Organ transplant","Ambulance fees","Outpatient day care surgery"],"c","Ambulance fees standard; others are extensions."],
+["P3","L","Methods for sub-standard lives, EXCLUDING ____.",["Premium discount","Contingent debt or lien","Alternative contract","Extra premium"],"a","Higher risk never gets a discount."],
+["P3","R","If the group policy owner has no ____ in the persons insured, the insurer must inform each of them.",["Utmost good faith","Insurable interest","Personal interest","Contractual capacity"],"b","Insurable interest."],
+["P3","M","Handling adverse risks in MHI: I. Waive pre-existing exclusion II. Exclusion endorsement III. Extra premium IV. Benefit limitations",["I, II, III","I, III, IV","II, III and IV","I, II, III, IV"],"c","Waiving exclusion would increase risk."],
+["P3","L","Part 3 Schedule 9 FSA 2013 non-contestability states that ____.",["After 2 years, avoid via court","After 2 years, can be avoided if a material fact was fraudulently omitted","After 2 years, avoid if mistakenly left out","After 2 years, cannot be avoided at all"],"b","Textbook rule: after 2 years, only fraud on a material fact allows avoidance.","Past-year #3 answer key says (d). This portal follows the FSA/textbook wording (b)."],
+["P3","M","Which is NOT normally added to a hospitalisation plan?",["Organ transplant","Accidental death benefit","Outpatient day care","Cover for migration overseas"],"d","Migration cover isn’t offered."],
+["P3","M","Reducing benefit payable, shortening disability income period or bigger deductible for high-risk individuals is called ____.",["Cover restrictions","Extra premium","Exclusion endorsement","Benefit limitations"],"d","Benefit limitations."],
+["P3","L","A ____, if known, would have led the insurer to refuse the policy.",["Material fact","Special fact","Simple fact","Common fact"],"a","Material fact."],
+["P3","L","A policy owner may return a life policy within ____ of delivery for a refund less medical expenses.",["30 days","15 days","60 days","45 days"],"b","15-day free-look, minus medical exam cost."],
+["P3","L","The insurer refunds overpayment ____.",["If more profit","If insured proves profit","If real age is less than stated","If healthier now"],"c","Younger → overpaid → refund."],
+["P3","L","When true age is greater than stated, the insurer will ____.",["Avoid the policy","Vary the sum assured in proportion to premium paid","Reduce premiums","Refuse the claim"],"b","Older → sum assured reduced."],
+["P3","L","After 2 years in force, a life contract shall not be avoided on these grounds EXCEPT ____.",["Pre-existing condition not disclosed","Careless misrepresentation of age","Statement omitted in proposal","Statement omitted in medical report"],"b","Past-year #3 key: (b).","Past Year #2 keys the same question (a). Sources conflict — confirm with your trainer."],
+["P3","R","Stages of the consumer buying process: I. Problem recognition II. Information search III. Evaluation of alternatives IV. Sales",["I and III","I, II and III","I, III and IV","II, III and IV"],"b","Sales isn’t a consumer stage."],
+["P3","L","A life policy on another’s life without insurable interest at inception is ____.",["Voidable","Void","Illegitimate","Unenforceable"],"b","Void."],
+["P3","L","After more than ____ years in force, the insurer cannot contest for careless misrepresentation.",["Three","Five","Two","Four"],"c","2 years."],
+["P3","L","Which is NOT a method of distributing surplus?",["Non-par maturity claim","Cash bonus","Guaranteed bonus","Interim bonus"],"a","Non-par = no surplus share."],
+["P3","M","After the critical illness sum assured is paid, the policy ____.",["Remains in force","Ceases on death","Continues until another illness","Is automatically terminated"],"d","Full CI payout ends the policy."],
+["P3","L","'Assurance' means cover for an event that is ____ to happen.",["Predicted","Certain","Impossible","Uncertain"],"b","Death is certain — assurance."],
+["P3","I","An ____ combines protection and investment.",["Annuity","Endowment","Investment-linked life plan","Term"],"c","ILP."],
+["P3","L","The earliest, simplest form of life insurance for a fixed term:",["Term","Investment-linked","Endowment","Whole life"],"a","Term."],
+["P3","L","'Non-contributory' group term life means premiums are ____.",["Paid entirely by the employer","Subsidised","Paid by government","Paid by employee"],"a","Employer pays all."],
+["P3","I","In an ILP, the ____ bears the investment risk and reward.",["Policy owner","Insurer","Agent","Fund manager"],"a","Policy owner."],
+["P3","L","Eligibility to auto-add new employees to group life:",["Permanent and temporary with permits","Healthy employees any age","Selected by recruitment","Permanent employees aged 16 to 60"],"d","Permanent, 16–60."],
+["P3","L","Endowment premiums are higher than whole life and term because ____.",["Extra premium for the survival benefit","Guaranteed insurability","Investment","Yearly renewable"],"a","Pays out on survival too."],
+["P3","M","Which is a physical hazard in medical underwriting?",["Employment history","Personal and family medical history","Claims history","Previous insurance"],"b","Health history = physical hazard."],
+["P3","L","Why do premiums differ between insurers using the same factors?",["Channels and branding","Capital reserves","Different cost structures, risk assessment and investment returns","Valuation methods"],"c","Costs, risk view, investment returns."],
+["P3","L","Premium for participating endowment is higher due to ____.",["Higher risk and bonus","Survival benefit and bonus payable","Longer terms","Ease of payment"],"b","Survival benefit + bonus."],
+["P3","L","Higher-risk individuals paying more for the same cover are ____ risks.",["Uninsurable","Standard","Below average","Sub-standard"],"d","Sub-standard."],
+["P3","L","With initial premium paid and receipt issued, the proposer is covered for ____ for a stipulated period.",["Accidental death","Illness","Suicide","Critical illness"],"a","Temporary accidental death cover."],
+["P3","L","If the policy owner dies without a nomination, money is paid to ____.",["Lawful nominees","Spouse, children, parents","Lawful executor or administrator","Beneficiaries"],"c","No nominee → estate executor/administrator."],
+["P3","P","Heart attack while driving, car hits a tree, he dies. To decide if it’s accidental, insurers apply ____.",["Indemnity","Insurable interest","Doctrine of proximate cause","Subrogation"],"c","Find the dominant cause."],
+["P3","R","Under FSA 2013, money is paid to beneficiaries without probate, with the balance to the executor, if policy monies exceed ____.",["RM5,100,000","RM1,000,000","RM100,000","RM50,000"],"c","Up to RM100,000 without probate."],
+["P3","R","When comparing with other policies, an agent should ____.",["Make clear distinctions between characteristics","Push inferior products","Make biased comparisons","Persuade cancellation"],"a","Fair, clear comparison."],
+["P3","R","In obtaining underwriting information, the agent ensures completion of the proposal form and the ____.",["Relevance of questions","Accuracy of relevant records","Integrity of data","Credibility of medical report"],"b","Accuracy of records."],
+["P3","R","Life insurance requires high responsibility and professionalism from insurance ____.",["Intermediaries","Brokers","Companies","Consumers"],"a","Intermediaries."],
+["P3","I","Which ILP characteristic does NOT exist in traditional life policies?",["Protects from investment risk","Directly linked to investment performance","Government guaranteed","Investment only"],"b","Linked to fund performance."],
+["P3","R","Agents ensure confidentiality to avoid contravening ____.",["Duty of disclosure","FSA 2013","Agency contract","Personal Data Protection Act 2010"],"d","PDPA 2010."],
+["P3","R","Under the code of practice, the agent should NOT ____.",["Advise where knowledgeable","Say a name was given by another person unless prepared to disclose it with consent","Call at a suitable time","Ensure suitability"],"b","Past-year key: (b)."],
+["P3","I","Correct statement on the Sum Assured Multiple (SAM) rule:",["Age 1–16: 15× premium","Age 56 and above: 15× basic annual premium","Rider premium included","Top-up included"],"b","Past-year key: aged 56+ → 15×."],
+["P3","I","Choose the correct statement.",["Traditional gives better return","ILP guarantees return","ILP offers more flexibility and transparency","Traditional is more flexible"],"c","ILP = flexible, transparent."],
+["P3","L","What can be distributed in non-participating policies?",["Guarantee bonus","Cash bonus","Interim bonus","None of the above"],"d","Non-par = no bonus."],
+["P3","L","Standard mortality tables are derived from ____.",["Occupation","Combined mortality experience of life insurers in the territory","Race","Insurer’s own policyholders"],"b","Industry-wide experience."],
+["P3","L","What is a rider?",["Whole life with ADB","Supplementary benefit added for extra premium","Extra commission","Overriding clause"],"b","Rider = add-on benefit."],
+["P3","L","Insurable interest does NOT exist when ____.",["Father insures child","Creditor insures debtor","Husband insures wife","Brother insures sister"],"d","Siblings have no automatic insurable interest."],
+["P3","L","Which is NOT a basic need for life insurance?",["Yearly profit of the insurer","Retirement","Children’s education","Loss of income on death"],"a","Insurer’s profit isn’t your need."],
+["P3","P","Which is NOT a characteristic of insurable risk?",["Reasonable premium","Illegal and against public policy","Many similar risks","Insurable interest"],"b","Illegal = uninsurable."],
+["P3","I","____ is investing across different asset categories and market segments.",["Hedging","Risk control","Profit maximisation","Diversification"],"d","Diversification."],
+["PA","P","What is the correct definition of pure risk?",["Risk with only the possibility of loss","Affects individuals only","Cannot be measured financially","Possibility of financial gain"],"a","Pure risk: loss or no loss — never gain."],
+["PA","P","Which is NOT a characteristic of insurable risk?",["Not against public policy","Fortuitous or accidental","Must be a speculative risk","Homogeneous exposures"],"c","Insurable risks are pure, not speculative."],
+["PA","P","Which method transfers the financial burden of loss to another party, e.g. an insurer?",["Avoidance","Transfer","Retention","Control"],"b","Risk transfer."],
+["PA","P","In insurance, a fire loss is classified as ____.",["Speculative risk","Fundamental risk","Pure risk","Physical hazard"],"c","Fire = pure risk."],
+["PA","P","Which description is INCORRECT?",["A peril is the main cause of loss","A hazard increases the chance of loss","Uncertainty of loss is risk","Moral hazard is identified by physical features of the risk"],"d","Moral hazard = human attitude, not physical features."],
+["PA","P","The proximate cause of a loss is usually the ____.",["Dominant cause","Nearest in time","Nearest in distance","Insured peril"],"a","Dominant, effective cause."],
+["PA","P","Which principle ensures insurers share a loss proportionately when several policies cover it?",["Proximate cause","Subrogation","Contribution","Insurable interest"],"c","Contribution."],
+["PA","P","How is indemnity usually measured in property insurance?",["By formula","Agreed value","Reinstatement value","First loss"],"c","Textbook key: reinstatement value."],
+["PA","L","For a life policy to be valid, when must insurable interest exist?",["Only at inception","At claim","At inception and claim","At inception or claim"],"a","Life: at inception only."],
+["PA","R","How does Schedule 9 FSA 2013 define a 'consumer insurance contract'?",["Life and general contracts","Contract for personal purposes, not related to trade, business or profession","Homeowner property contract","Any policy bought by an individual"],"b","Personal purpose only."],
+["PA","P","Difference between uninsured and excluded risks?",["Uninsured is excluded","Uninsured is always lower","Excluded can’t be covered by any policy","Excluded can’t be covered; uninsured can be added for extra premium"],"d","Uninsured can be bought back; excluded can’t."],
+["PA","P","Which identifies the main or direct cause that sets off a chain of events causing loss?",["Proximate cause","Root cause","Systemic cause","Indirect cause"],"a","Proximate cause."],
+["PA","P","If the proposer fraudulently breaches good faith, which remedy can the insurer NOT take?",["Avoid the whole policy","Avoid policy and keep premiums","Waive the breach, keep policy","Reject a specific claim but keep the policy in force"],"d","Textbook key: (d)."],
+["PA","P","Who has NO insurable interest in another person’s life?",["Child in parent","Employer in employee","Dependant in carer","Landlord in tenant"],"d","Landlord–tenant: no insurable interest."],
+["PA","R","Which is NOT a function of BNM?",["Raise agency professionalism and conduct","Promote fair, professional insurer conduct","Protect consumer rights","Watch solvency and market conduct"],"a","Agency professionalism is driven by industry bodies, e.g. LIAM."],
+["PA","R","Which new law replaced the Insurance Act 1996?",["Islamic Financial Services Act 2013","Financial Services Act 2013","Insurance Act 2013","Financial Services Authority 2013"],"b","FSA 2013 replaced Insurance Act 1996."],
+["PA","R","Main objectives of the Consumer Education Programme (CEP): I. Informed decisions II. Choose products that fit III. Know rights and responsibilities IV. Maximise profit from buying",["I & II","I & III","I, II & III","II, III & IV"],"c","Not about profit."],
+["PA","R","Which is an alternative dispute resolution channel for financial consumers?",["Ombudsman for Financial Services (OFS)","Insurer’s complaints unit","MyCC","CCM"],"a","OFS."],
+["PA","R","Under AML/CFT guidelines, customer due diligence must be done on ____.",["Intermediary or agent","Financial adviser","Customer or beneficial owner","Service provider"],"c","Customer or beneficial owner."],
+["PA","R","Which does the PDPA 2010 NOT treat as 'personal data'?",["Personal info on commercial transactions","Personal info posted on social media","Sensitive personal data","Expression of opinion about the data subject"],"b","Textbook key: (b)."],
+["PA","P","Elements needed for a valid contract: I. Offer and acceptance II. Intention to create legal relations III. Capacity IV. Form required by law V. Consideration",["I, II, III & IV","II, III, IV & V","I & III","I, II, III, IV & V"],"d","All five."],
+["PA","P","Which clause describes when the policy operates and the events that trigger a claim?",["Exclusion clause","Operative clause","Subrogation clause","Contribution clause"],"b","Operative clause."],
+["PA","P","The following make an insurance contract void EXCEPT:",["No insurable interest","No consensus or fundamental mistake","Pre-contract condition not met","Innocent misrepresentation on the proposal"],"d","Innocent misrepresentation → voidable, not void."],
+["PA","P","The key feature that makes a contract legally binding is ____.",["Free entry","Intention to create legal relations","Agreement in good faith","Stamped document"],"b","Intention to create legal relations."],
+["PA","P","The policy’s 'operative clause' describes ____.",["Insured’s details","Scope of cover","Excluded risks","Policy conditions"],"b","Scope of cover."],
+["PA","P","What is a voidable contract?",["Breach by a party","Fundamental mistake makes it void","Binding, but one party has the right to rescind","A party lacks capacity"],"c","Valid until the innocent party rescinds."],
+["PA","P","Which is NOT usually in the policy schedule?",["Name and address","Period","Premium","Exclusions"],"d","Exclusions are in the policy wording."],
+["PA","P","Best description of an unenforceable contract:",["Binding even if one refuses","Valid but cannot be enforced in court","Valid and legal","Legal but not binding"],"b","Valid, but no court remedy."],
+["PA","P","'Consideration' in an insurance contract means ____.",["Temporary cover note","Premium paid to get cover","Claim to pay premium","Promise to pay sum assured"],"b","Premium."],
+["PA","P","Contracts in Malaysia are governed by ____.",["Sale of Goods Act 1965","FSA 2013","Contracts Act 1950","Insurance Act 1996"],"c","Contracts Act 1950."],
+["PA","R","Which is INCORRECT about an insurance agent’s role?",["Sells products and services","Agent of the insurer, bound by it","Represents many insurers and picks the best for the insured","Pays all money collected to the principal"],"c","That describes a broker, not an agent."],
+["PA","R","When can agency be terminated? I. Transaction completed II. Term expired III. Mutual agreement IV. Death, insanity or bankruptcy V. Law makes it illegal",["I, II & III","II, IV & V","II, III & IV","All of the above"],"d","All five."],
+["PA","R","When can an agent delegate a task to someone else?",["Never","Del credere agent","Purely clerical work","Sub-agent acted before"],"c","Only purely clerical work."],
+["PA","R","Duties of a principal to the agent: I. Protect from competition II. Ongoing training III. Pay agreed remuneration IV. Indemnify the agent",["I & II","II & III","III & IV","I & IV"],"c","Pay and indemnify."],
+["PA","R","Prohibited business conduct: I. Misleading conduct II. Undue pressure or coercion III. Leaking confidential info to others IV. Demanding payment for unsolicited products",["I & II","I, II & IV","III & IV","All of the above"],"d","All four."],
+["PA","M","Which is NOT a Medical and Health Insurance/Takaful (MHIT) product?",["Group life insurance","Long-term care","Medical reimbursement","Dental"],"a","Group life is life cover, not MHIT."],
+["PA","M","Methods to control medical claim costs: I. Inner limits II. Schedule of surgical procedures III. Max benefit period IV. Time limits",["I & II","II, III & IV","I, III & IV","All of the above"],"d","All four."],
+["PA","M","What does a hospital income policy pay?",["Income replacement when unable to work","Fixed daily allowance while hospitalised","Reimbursement of bills","Lump sum on CI"],"b","Daily cash per day in hospital."],
+["PA","M","Main purpose of the revised Medical and Health Insurance guidelines?",["Raise premiums for high-risk","Cut claim costs","Set minimum standards for life and general insurers","Add limits"],"c","Minimum standards."],
+["PA","M","Which MHIT policy’s renewal is decided by the insurer/takaful operator?",["Yearly renewable","Guaranteed yearly renewable","Non-renewable","Term"],"a","Yearly renewable — insurer decides."],
+["PC","L","When can a policy owner surrender a life policy?",["Any time after inception","After three years of premium","Third anniversary","Two years after inception"],"a","10th edition: any time after inception (if the policy provides surrender value).","Past Year #1 asked the old version — answer 3 years. Read the question wording carefully."],
+["PC","L","When does a minor have capacity to insure? I. Age 10+ on own life II. Age 10+ on another’s life with insurable interest and parent’s consent III. Age 16+ on own life IV. Age 16+ on another’s life with insurable interest",["II, III & IV","I, II, III & IV","II & IV","I & II"],"b","All four. Ages 10–15 need parent/guardian’s written consent."],
+["PC","L","Which is NOT true about insurable interest in life insurance?",["Prevents profiting from another’s death","No insurable interest = void","Must exist at inception","It means payment on death or survival"],"d","That’s the definition of a benefit, not insurable interest."],
+["PC","R","When inviting a proposal, the agent should disclose: I. Insurer’s name II. Relationship with insurer III. Premium charged IV. Benefit of buying through him",["I, II, III & IV","I, II & III","II & IV","I & II"],"b","Not 'benefit of buying with me'."],
+["PC","L","A person has insurable interest in: I. Spouse II. Child or ward under majority III. Employee IV. Person he depends on for maintenance or education",["I, III & IV","I, II & III","I & II","I, II, III & IV"],"d","All four."],
+["PC","R","Under FSA Schedule 8 para 12, how must a general insurer handle premium refunds?",["Pay the agent to pass on","Pay directly to the policy owner, not any agent","Hold in suspense account","Discretion to withhold"],"b","Directly to policy owner."],
+["PC","L","Which is NOT used to set a paid-up policy’s sum assured?",["Actuarial principles","Policy owner’s annual income","Fair treatment","Surrender value"],"b","Income isn’t a factor."],
+["PC","L","The major objective of buying life insurance is ____.",["Retirement income","Reduce insured’s burden","Protect dependants if the breadwinner dies early","Increase savings"],"c","Protect dependants."],
+["PC","L","A retirement annuity is attractive to someone with ____.",["Large family","Severe illness","Low longevity risk","High longevity risk"],"d","Lives long → needs lifetime income."],
+["PC","L","Which policy has no savings element?",["Whole life","Endowment","Term","None"],"c","Term."],
+["PC","L","Whole life differs from term because ____.",["Premium rises yearly","No premium after 65","Always cheaper","Whole life builds cash value, term does not"],"d","Cash value."],
+["PC","L","Advantages of a life annuity EXCEPT ____.",["Lack of liquidity","Lifetime income","Retirement security","Possible tax benefit"],"a","Illiquidity is a drawback."],
+["PC","L","Which is correct about bonuses in participating policies?",["Reversionary bonus always guaranteed, paid on surrender","Terminal bonus paid yearly","Cash bonus is non-guaranteed, decided yearly","Interim bonus only after 5 years"],"c","Cash bonus: non-guaranteed, declared yearly."],
+["PC","L","Converting term to permanent without proof of insurability, with premium adjustment, is the ____.",["Guaranteed suitability option","Guaranteed insurability option","Guaranteed convertibility option","Guaranteed permanent option"],"c","Convertibility."],
+["PC","L","What does 'waiver of premium' mean?",["Waives suicide clause","Free extra cover","Pays future premiums on permanent disability","Agent pays premiums"],"c","Future premiums waived on disability."],
+["PC","L","In participating policies, policyholders share profits as: I. Bonus II. Salary III. Lottery IV. Dividend/bonus",["I & II","II & III","III & IV","I & IV"],"d","Bonuses and dividends."],
+["PC","L","Which is NOT true about life premiums?",["Rate tables by age and term","Net = risk premium + interest","Gross = net + expenses and profit","Participating policies have no loading"],"d","Par policies do carry loading."],
+["PC","L","Charging a uniform premium throughout despite rising mortality is the ____.",["Level payment system","Level premium system","Increasing premium system","Decreasing term"],"b","Level premium system."],
+["PC","L","Insurance running expenses fall into three types EXCEPT ____.",["Initial","Renewal","Termination","Procurement"],"d","Initial, renewal, termination."],
+["PC","L","Which is NOT a major factor influencing mortality?",["Age","Gender","Race","Occupation"],"c","Race isn’t used."],
+["PC","L","Main factors an actuary uses to price premiums: I. Mortality II. Morbidity III. Investment return IV. Expenses",["I, III, IV","I, II, III","I & II","I, II, III, IV"],"d","All four."],
+["PC","L","Which identify high-risk profiles? I. Lifestyle II. Gender III. Occupation IV. Financial stability",["I, II & III","I, II & IV","I, III & IV","II, III & IV"],"c","Gender isn’t a high-risk marker."],
+["PC","L","Which is NOT used to handle adverse risks?",["Extra premium","Alternative plan","Reduced benefits","Premium discount"],"d","No discount for higher risk."],
+["PC","L","Sub-standard risk is best described as ____.",["Accepted at standard terms","Accepted on special terms due to health or occupational hazards","Never acceptable","Uninsurable, e.g. terminally ill"],"b","Special terms."],
+["PC","L","Which underwriting factor is NOT related to moral hazard?",["Insurable interest exists","Sum assured fits income","Type of product applied for","Multiple policies elsewhere"],"c","Product type isn’t moral hazard."],
+["PC","L","Which underwriting factor is NOT related to physical hazard?",["Height and weight","Family history","Earning capacity","Lifestyle"],"c","Income = financial underwriting."],
+["PC","L","The purpose of financial underwriting in life insurance:",["Assess physical hazard","Assess moral hazard","Select wealthy clients","Ensure insurable interest"],"b","Over-insurance → moral hazard."],
+["PC","L","The main source of information for life underwriting:",["Proposal form","Financial report","Agent’s report","Sales illustration"],"a","Proposal form."],
+["PC","L","The agent’s role in underwriting:",["Calculate premium","Give financial advice","Help fill the proposal","Ensure all material facts are disclosed so both sides decide well"],"d","Full disclosure."],
+["PC","L","When does the life insurer assume the risk?",["When acceptance is issued and first premium received","On complete proposal","After underwriting review","After policy delivery"],"a","Acceptance + first premium."],
+["PC","L","A life claim may arise in all EXCEPT:",["Death of insured","Death of beneficiary","Maturity","Critical illness"],"b","Beneficiary’s death doesn’t trigger a claim."],
+["PC","L","For a missing person, after how long can the court presume death?",["1 year","3 years","5 years","7 years"],"d","7 years."],
+["PC","L","Supporting documents for a death claim: I. Death certificate II. Post-mortem report III. Presumption of death order IV. Deceased’s ID number",["I & IV","I, II & III","I, II & IV","I, II, III & IV"],"d","All four."],
+["PC","L","A death claim must be paid within ____ of notice, or compound interest applies.",["15 days","30 days","60 days","7 days"],"c","60 days."],
+["PC","L","Claims handled by the claims department: I. Death II. TPD III. Critical illness IV. PA rider",["I & II","I, II & III","II & IV","All of the above"],"d","All."],
+["PC","R","Which is NOT part of the life industry’s Code of Ethics and Conduct?",["Code of practice guide","Ethics for selling","Statement of life business","Stock market investment guide"],"d","Stock market guide isn’t part of it."],
+["PC","R","Under the Code of Ethics and Conduct, a key insurer responsibility:",["Report observed breaches to BNM quarterly","Donate profit","All staff hold PhDs","None"],"a","Report breaches to BNM."],
+["PC","R","Under the Service Guide, which is NOT in the 'pre-purchase' stage?",["Understand needs","Explain features and exclusions","Help fill the proposal form","Give PDS"],"c","Filling the form is the 'decide to buy' stage."],
+["PC","R","Main objective of the 'decision to buy' stage?",["Understand needs","Help complete purchase and ensure T&Cs are understood","After-sales service","None"],"b","Complete purchase with understanding."],
+["PC","R","During the policy’s life, which should the agent NOT do?",["Help renew","Guide claims","Do a new full fact-find","Coordinate change of agent"],"c","Not a new full fact-find."],
+["IL","I","What made ILPs popular in Malaysia? I. Young people exploring insurance II. Preference for traditional policies III. Investment flexibility IV. Higher potential returns",["I & II","II & III","III & IV","I & IV"],"c","Flexibility + higher potential return."],
+["IL","I","Correct description of an investment-linked policy:",["Whole-life participating","Capital guaranteed","Savings with minimum return","Protection plus investment opportunity"],"d","Protection + investment."],
+["IL","I","ILPs are also known elsewhere as: I. Mutual-fund-linked II. Unit-linked III. Variable life IV. Universal life",["I, II & III","II, III & IV","II & III","All of the above"],"d","Textbook key: all."],
+["IL","I","ILP funds are managed by: I. Insurer’s in-house managers II. Appointed external fund managers III. Unit trust companies IV. The insurer’s board",["I & II","II & III","II & IV","All"],"a","In-house or appointed managers."],
+["IL","I","Main ILP advantages: I. Life cover II. Flexible fund choice III. Customisable IV. Estate planning tool",["I & II","II & III","III & IV","All of the above"],"d","All four."],
+["IL","I","Which correctly describes single premium ILPs vs regular premium?",["Requires ongoing premiums","More to protection","One lump sum, usually more allocated to investment","Adjust cover as needs change"],"c","Lump sum, investment-heavy."],
+["IL","I","Dual pricing for ILPs in Malaysia:",["One price, different fees","Two prices: bid (buy back) and offer (sell), about 5% apart","NAV plus fee","Adopted 2006"],"b","Bid–offer spread ≈ 5%."],
+["IL","I","Main use of unallocated premium?",["Invest in funds","Insurance cost and fund fees","Increase account value","Agent commission and other admin costs"],"d","Commission + admin."],
+["IL","I","Which admin cost is paid from unallocated premium?",["Monthly policy fee","Accumulated value","Buying units","Technology upgrade"],"d","Textbook key: (d)."],
+["IL","I","Purpose of dollar-cost averaging in ILPs?",["Less need to pay","Guarantees profit","Fixed return","Spreads investment over time to reduce volatility impact"],"d","Spread timing → smooth volatility."],
+["IL","I","General ILP design conditions: I. Name must show it’s ILP II. Capital guarantee must be by a licensed bank III. Must offer minimum return guarantee IV. Riders can be added via unit deduction or separate premium",["I & II","I, II & IV","II, III & IV","I, III & IV"],"b","No guaranteed minimum return required."],
+["IL","I","'Spreading risk across assets': I. Many asset types lowers risk II. Manager reputation is the main factor III. Diversifies and cuts single-asset exposure IV. Reduces volatility impact",["I & II","I, II & III","I, III & IV","II, III & IV"],"c","II is off-topic."],
+["IL","I","Minimum Allocation Rate (MAR): I. Average proportion allocated II. Minimum proportion allocated III. BNM MAR years 1–3 is 60% IV. Years 7–10 is 100%",["I & II","II & III","I, III & IV","II & IV"],"b","Minimum proportion; 60% for years 1–3."],
+["IL","I","About the annual Fund Management Charge (FMC):",["Set regardless of strategy","Capped at 2% for all","Optional, charged to policyholder","Must be charged to the fund through unit pricing"],"d","Via unit pricing."],
+["IL","I","How do insurers earn from managing ILP funds?",["Fixed admin fee","Set own return targets","Commission per investment","Charge on fund value based on how it’s managed"],"d","FMC on fund value."],
+["IL","I","When charging FMC, insurers must ____.",["Deduct before buying units","Charge any fair rate","Charge only on profit","Reflect strategy and charge via unit pricing"],"d","Reflect strategy, via unit pricing."],
+["IL","I","What agents must know about the sales illustration: I. Educational tool II. Use insurer-approved version and explain III. Shows cash flow changes and charges IV. Copy need not be in policy documents",["I & II","II & III","I, II & III","II, III & IV"],"c","IV is false — copy must be included."],
+["IL","I","Scenario X and Y in an ILP sales illustration represent ____.",["Assumed fund returns","Insurer’s volatility scenarios","Expected premiums","Inflation"],"a","Assumed returns."],
+["IL","I","The prescribed returns for Scenario X and Y are ____.",["2% and 5%","1% and 4%","3% and 6%","2% and 6%"],"a","2% and 5%."],
+["IL","I","Main purpose of Scenario X and Y?",["Show effect of different assumed returns on account value","Show past performance","Forecast guaranteed returns","Set allocation rate"],"a","Illustrate possible outcomes."],
+["IL","I","Product materials from the insurer: I. Extra to illustration and fund fact sheet II. Includes notices, brochures, ads III. Agent provides before or at sale IV. Agent may use own brochure",["I & II","II & III","III & IV","I, II & III"],"d","Never self-made brochures."],
+["IL","I","Agent duties on fund performance reports: I. Tell client it comes at least yearly II. Explain key info III. Answer questions IV. Help make informed decisions",["All of the above","I, II & III","I, II & IV","I, III & IV"],"a","All four."],
+["IL","I","What is a fund fact sheet?",["Annual statement","Overview of fund objective, risk, fees, past performance and holdings","Yearly performance report","Analysis of strategy changes"],"b","Fund overview."],
+["IL","I","Agent duties on unit price publication: I. Tell client NAV is published daily on insurer’s website II. Help get NAV by other means III. Help get historical NAV IV. Advise when to switch",["II & III","I, II & III","III & IV","I & IV"],"b","Not advising switch timing."],
+["IL","I","Best description of an ILP with a coverage extension feature:",["Auto-renews after the initial term, every 5 or 10 years to 100, no re-underwriting","Renews mid-term","Renews with underwriting","Renews with medical underwriting only"],"a","After initial term, no re-underwriting."],
+["IL","I","Key disclosure points for coverage extension ILPs: I. Plain language and limits II. Clear, not misleading III. Mechanism, premiums, process, re-underwriting IV. Amounts for initial and extension periods",["I & II","II & III","II, III & IV","All of the above"],"d","All four."],
+["IL","I","How often must clients get an ILP value statement?",["Every two years","On request","Quarterly","Yearly"],"d","Yearly."],
+["IL","I","Key info in the annual statement the client must understand:",["Agent commission","Policy status and sustainability test result","Fund manager profile","New products"],"b","Status + sustainability test."],
+["IL","I","When must the insurer ask the policyholder to confirm the final premium amount?",["30 days before expiry","60 days before review","At least 90 days before the extension period","Year-end"],"c","90 days before extension."],
+["IL","I","If the policyholder agrees to raise premium, what should be disclosed?",["Cancellation notice","Termination letter","Reminder during the regular premium review","Commission report"],"c","Reminder at premium review."],
+["IL","I","How is premium paid in single premium ILP (SP-IL)?",["Regularly","One lump sum","Over first 10 years","No premium"],"b","One lump sum."],
+["IL","I","Main objective of a regular premium ILP (RP-IL) policyholder?",["Maximise return","Get life cover","Financial security for dependants","Build wealth"],"c","Textbook key: (c)."],
+["IL","I","Minimum basic single premium for SP-IL is usually based on ____.",["Age and health","Target market","Fund performance","Each insurer’s own decision"],"d","Insurer decides."],
+["IL","I","Which SP-IL part is one-off and usually not over 5%?",["Sum assured","Upfront charge","COI","Minimum cover"],"b","Upfront charge ≤ 5%."],
+["IL","I","Basic sum assured (BSA) in SP-IL represents ____.",["Current unit value","Minimum guaranteed amount","Total premium","Allocated + unallocated"],"b","Minimum guaranteed."],
+["IL","C","SP-IL upfront charge is 4% of single premium. Single premium is RM15,000. Upfront charge?",["RM600","RM1,500","RM4,000","RM5,000"],"a","RM15,000 × 4% = RM600."],
+["IL","I","Purpose of COI deduction in SP-IL?",["Fund fees","Raise SA","Reduce loss","Cover the gap between account value and sum assured"],"d","COI covers the gap (sum at risk)."],
+["IL","I","When does COI deduction stop in SP-IL?",["When account value ≥ BSA","After set years","Good performance","On request"],"a","No gap → no COI."],
+["IL","I","How does COI change as account value rises?",["Constant","Rises proportionally","Gradually decreases","Fluctuates"],"c","Smaller gap → less COI."],
+["IL","C","Account value RM9,500, BSA RM10,000. Current COI status?",["Charged on sum at risk of RM500","Charged on whole BSA","None","Waived"],"a","RM10,000 − RM9,500 = RM500."],
+["IL","C","Account value RM9,500, BSA RM10,000. Sum at risk (SAR)?",["RM500","RM9,500","RM0","RM10,000"],"a","SAR = BSA − account value."],
+["IL","I","Account value RM9,500, BSA RM10,000. When will COI stop?",["When account value ≥ BSA","When below BSA","At maturity","When SA adjusted"],"a","Once AV reaches BSA."],
+["IL","I","One benefit of an ILP:",["Life cover only","Guaranteed return","Access to pooled, diversified funds","Self-managed investing"],"c","Pooled diversification."],
+["IL","I","Which ILP part is managed by professional fund managers?",["Policy fee","Insurance charges","Sum assured","Investment funds"],"d","Funds."],
+["IL","I","An official sales illustration usually contains ____.",["Fund name only","Summary: plan, riders, cover, total premium, benefits","Past performance ranking","Commission"],"b","Proposal summary."],
+["IL","I","When is a premium holiday applied?",["When bonus declared","Premium not received but account value still covers charges","High scenario","Fund switch"],"b","AV pays the charges."],
+["IL","I","Accessibility benefit of ILPs:",["Stock tips","Access to diversified funds run by professional managers","Direct stock trading","Expert advice"],"b","Professional diversified funds."],
+["IL","I","ILP benefits: I. Diversification, better risk profile II. Flexibility III. Fixed nominal fee IV. Insurer isolates market risk",["I & II","II & IV","I & III","All"],"a","Diversification + flexibility."],
+["IL","I","Who signs to confirm receiving and understanding the illustration and PDS?",["Insurer rep","Prospective policyholder","Supervisor","Fund manager"],"b","Client signs."],
+["IL","I","RP-IL vs traditional par whole life — who bears investment risk?",["RP-IL shared / Whole life policyholder","RP-IL insurer / Whole life shared","RP-IL policyholder / Whole life shared with insurer","RP-IL shared / Whole life insurer"],"c","ILP: you. Par: shared."],
+["IL","I","Effect of partial withdrawal on ILP death benefit:",["Fixed","May increase","Usually reduced by the withdrawal amount","Only if insurer loses"],"c","Reduced."],
+["IL","I","ILP unit value is linked to ____.",["Guaranteed cash value","Whole life","Underlying assets","Fixed charges"],"c","Underlying assets."],
+["IL","I","ILP charges (policy fee, COI, FMC) ____.",["Guaranteed and fixed","Adjusted often","Stable throughout","Can be adjusted with prior notice"],"d","With notice."],
+["IL","I","Main factors before investing in an ILP fund:",["Objective, risk tolerance, protection","Access to funds, horizon, tax","Funds available, performance, risk-return","Income, growth, safety"],"b","Textbook key: (b)."],
+["IL","I","Which investment objective focuses on steady income?",["Guarantee","Income","Growth","Safety"],"b","Income."],
+["IL","I","Risk assessment involves ____.",["Financial resources","Horizon","Tax","Client’s risk tolerance and preference"],"d","Tolerance."],
+["IL","I","Why is a longer horizon linked to higher risk tolerance?",["More time to recover from losses","Care less","Risk-free","Short-term easier"],"a","Time to recover."],
+["IL","I","Purpose of cash flow and net worth analysis:",["Fund performance","Access to funds","Client’s finances and money available to invest","Tax"],"c","Money available."],
+["IL","I","How does tax affect overall return?",["No effect","Can significantly reduce return","Increases","Specific only"],"b","Reduces."],
+["IL","I","Relationship between risk and return:",["Higher risk, usually higher potential return","Higher risk, lower","Unrelated","Lower risk, higher"],"a","Risk–return trade-off."],
+["IL","I","Main risk profiles for investment styles:",["Very conservative, conservative, balanced, aggressive, very aggressive","3 levels","3 levels","3 levels"],"a","Five profiles."],
+["IL","I","Factors in ILP risk assessment: I. Age, income, stability II. Family and finances III. Experience and knowledge IV. Tolerance and orientation",["I & II","I & III","I, II & III","All"],"d","All four."],
+["IL","I","Why can long-term investors hold less liquid investments?",["Government bonds only","Don’t need the money soon","Chase high risk","Property only"],"b","No urgent need."],
+["IL","I","Why must insurers invest per the fund fact sheet objectives?",["Flexibility","Match policyholders' expectations","Maximise returns","Cut costs"],"b","Match expectations."],
+["IL","I","If minimum fund size isn’t met in the initial offer period, the insurer must ____.",["Extend","Refund policyholders with interest or investment gains","Change strategy","Lower minimum"],"b","Refund plus returns."],
+["IL","I","Compared with government bond funds, corporate bond funds have ____.",["Lower yield, lower risk","Higher yield, higher risk","Same","Longer terms"],"b","Higher yield, higher risk."],
+["IL","I","Advantage of money market instruments:",["Inflation hedge","High growth","Beat equities","Stable, minimal price swings"],"d","Stability."],
+["IL","I","Main benefit of REITs:",["High growth","Diversification via property exposure","Rate-proof","Low fees"],"b","Property exposure."],
+["IL","I","SP-ILP vs unit trust on liquidity:",["Both very liquid","SP-ILP more liquid","SP-ILP may have minimum period and early withdrawal penalty; unit trusts are highly liquid","UT has penalty"],"c","SP-ILP less liquid."],
+["IL","I","Trustee difference: SP-ILP vs unit trust",["UT has no trustee","Both use insurer","SP-ILP: insurer is trustee; UT may use independent trustee","Only UT"],"c","Insurer vs independent trustee."],
+["IL","I","Advantages of equities: I. Growth and dividends II. Diversification III. Liquidity IV. Geographic spread",["I & II","I, II & III","III & IV","II, III & IV"],"b","Textbook key: I, II, III."],
+["IL","I","Features of fixed income: I. Government and corporate bonds II. Steady interest III. Lower risk than equities IV. More predictable than dividends",["I & II","II & III","II, III & IV","All"],"d","All four."],
+["IL","I","Order risk and return from low to high:",["Money market, fixed income, equities","Equities, fixed income, money market","Money market, equities, fixed income","Fixed income, money market, equities"],"a","Money market → bonds → stocks."],
+["IL","I","Correct statements: I. Many fund types II. Choose by goals and tolerance III. Value tied to chosen funds IV. Insurer bears investment risk",["II & III","III & IV","I, II & III","II, III & IV"],"c","Policyholder bears risk — IV false."],
+["IL","I","Lowest-risk fund among these:",["Equity","Fixed income","Balanced","Specialised"],"b","Fixed income."],
+["IL","I","Main feature of an index fund:",["Higher return","Property","Active management","Tracks a specific market index"],"d","Replicates an index."],
+["IL","I","Which fund limits investments to ethical and religious guidelines?",["Equity","Fixed income","Shariah-compliant","Global"],"c","Shariah-compliant."],
+["IL","I","Which fund suits investors focused on capital preservation and income?",["Equity","Fixed income","Shariah","Balanced"],"b","Fixed income."],
+["IL","I","A balanced fund balances ____.",["Capital growth and income","High risk","Cash","Short-term gains"],"a","Growth + income."],
+["IL","I","Which is NOT a risk of ILP funds?",["Volatility","Liquidity limits","Credit risk","Potential for higher return"],"d","That’s a benefit."],
+["IL","I","Global funds: I. Worldwide incl. emerging II. Many asset classes III. Currency and political risks IV. Higher return than all others",["II & IV","III & IV","II, III & IV","I, II & III"],"d","IV is false."],
+["IL","R","Why must agents pass CEILLI to market ILPs?",["Efficiency","Upselling","Ethics knowledge","Ensure only properly trained, authorised agents market these products"],"d","Authorisation."],
+["IL","R","Objectives of BNM’s ILP guidelines: I. Governance and professionalism II. Proper sales conduct III. Max returns IV. Transparency and disclosure",["I & II","I, II & III","I, II & IV","II, III & IV"],"c","Not maximising returns."],
+["IL","R","Objectives of MAR: I. Protect account value II. Sustainability test standards III. Better illustration format IV. Optimise returns and profit",["II, III & IV","I, III & IV","I, II & IV","I, II & III"],"d","Not profit."],
+["IL","R","Insurers must disclose product design info including: I. Names reflect strategy II. Options and guarantees III. Whole life or term IV. Commission structure",["I & III","I & II","I, II & III","All"],"b","Textbook key: I & II."],
+["IL","R","Consent needed before deducting rider charges during a premium holiday:",["Verbal","Written","None","Agent’s"],"b","Written."],
+["IL","R","Notice required before changing fees and charges:",["One month","Two months","Three months","Six months"],"c","3 months."],
+["IL","R","Charges insurers may levy on ILP funds: I. Commission, tax, auditor and valuer fees II. Custodian fees and hedging III. General admin IV. Systems investment",["I & II","II & III","I, II & III","All"],"a","Only fund-specific costs."],
+["IL","R","How often must takaful operators value investment-linked takaful fund assets?",["Weekly","Monthly","Yearly","Daily"],"d","Daily."],
+["IL","R","When providing seed money for a new ILP fund, the insurer must ____.",["Have an exit strategy to manage exposure","Provide liquidity","Limit foreign assets","Ensure liquidity"],"a","Exit strategy."]
+];
+const ZH=[
+["人寿保险的目的是____。",["从保险索赔中获利","帮助保险公司成长","为不确定的损失提供财务保障","避免意外造成的损失"],"保险是对不确定损失的财务保障,绝不是获利工具。"],
+["根据《医疗与健康保险业务指南》,费用分担并非强制;若适用,每次索赔以____(不含免赔额)或____(含免赔额)中较低者为限。",0,"记住:20% 或 RM3,000,以较低者为准。"],
+["定期寿险转换为永久寿险须____。",["按到达年龄或原始年龄计算保费","继续缴付相同保费","必须以单期保费缴付","转换时重新审查保费率"],"历年答案:转换时保费率需重新审查。"],
+["几乎所有普通及个人寿险契约都采用____,保费在整个保险期内保持不变。",["均衡付款制度","均衡保费制度","固定保费制度","统一付款制度"],"尽管死亡率上升,每年保费不变 = 均衡保费制度。"],
+["PIDM 通过____来补充国家银行的审慎监管角色。",["在机构破产时为存户及保单持有人提供安全网","保护消费者免受不道德代理员侵害","即时解决客户投诉","保护保险公司免受财务损失"],"PIDM = 成员机构倒闭时的安全网。"],
+["寿险核保的相关资料来源:I. 要保书 II. 体检医生报告 III. 代理员报告 IV. 主治医生声明",0,"历年答案:要保书、体检医生报告、代理员报告。"],
+["禁止的商业行为:I. 劝诱消费者隐瞒或含糊陈述重要事实 II. 代表保险公司洽谈保单 III. 作出误导性陈述、说明、承诺、预测或比较 IV. 代表保险公司处理保单签发或续保",0,"II 和 IV 是代理员的正常工作,不属禁止行为。"],
+["寿险公司不得仅因____而使保单无效或拒绝索赔。",["年龄误述","健康状况失实陈述","病史失实陈述","未透露危险嗜好"],"年龄错误以调整保费或保额处理,不会使保单无效。"],
+["用于支付死亡率成本及利息的费用称为____保费。",["毛","净","风险","书面"],"净保费 = 死亡率 + 利息;毛保费 = 净保费 + 开支及利润附加。"],
+["纯风险可保,因为____。",["没有损失的可能","需要维持赔偿原则","保险公司只接受好风险","至高真诚原则"],"历年答案:赔偿原则——纯风险不会带来获利。"],
+["定期保费保单在保单持有人连续缴付保费____年后取得退保价值。",0,"历年答案:3 年。","第10版课本:若保单提供退保价值,保单生效后任何时候都可退保。两种说法都要知道。"],
+["下列哪一类人不会被收取额外保费?",["爆破工人","地下矿工","文员","深海潜水员"],"文员没有职业危险。"],
+["寿险的 3 种索赔是:I. 附加契约索赔 II. 表现索赔 III. 死亡索赔 IV. 满期索赔",0,"没有所谓的“表现索赔”。"],
+["转让是将受保人的____转移给他人的机制。",["权利","责任","保险利益","权利和责任"],"转让同时转移权利与责任。"],
+["人们购买保险的主要原因是什么?",["想从索赔中获利","担心不幸事件的影响","想申请所得税减免","觉得对代理员有义务"],"人们为了应对不幸而买保险。"],
+["保单列明要保书和声明书为受保人与公司之间契约的基础。这部分称为____。",["陈述条款","叙述条款","执行条款","证明条款"],"叙述条款把要保书与声明书连接到契约。"],
+["Caveat emptor 的意思是____。",["卖方自负","买者自负","至高真诚","陈述"],"一般契约 = 买者自负;保险 = 至高真诚。"],
+["____红利只在保单因满期或死亡而索赔时支付,且保单须一直有效。",["终期","临时","特别","简单"],"终期红利 = 只在最后(满期或身故)支付。"],
+["若年龄误述,会采取哪项措施?",["若真实年龄较大,按已缴保费及真实年龄按比例调整保额和红利","取消保单,不退保费","取消保单,退还保费","若年龄少报,须按真实年龄补缴保费加利息"],"实际年龄较大 → 保额按比例减少。"],
+["投资联结保单的转换功能让____。",["保险公司把单期计划转为定期计划","保险公司把 ILP 转为传统储蓄保险","保单持有人转到另一家公司的保单","保单持有人将部分或全部投资从一个基金转到另一个基金"],"转换 = 在同一 ILP 内的基金之间调动。"],
+["若团体保单持有人对受保人没有保险利益,保险公司须将保单款项直接付给____。",["受益人","管理人","受保人","雇主"],"没有保险利益 → 款项直接付给受保人。"],
+["两种不没收选择:I. 转为缴清保单,不再缴费,保额减少 II. 缩短保障期,保额不变 III. 缴清但继续缴费,保额减少 IV. 缩短保障期并增加保额",0,"缴清保单 (I) 或展期保险 (II)。"],
+["根据投资联结业务指南,单位估值须每____进行。",["营业日","周","营业周","天"],"每个营业日估值。"],
+["火险保单附表不包括:",["保险公司名称、保险期限","受保人姓名地址、保费","业务性质、受保财产地点","索赔详情、条件及程序"],"索赔与条件写在保单条文,不在附表。"],
+["代理员须向客户解释:I. 额外收费及其目的 II. 市场上保费最低的其他保单 III. 保单限制、局限及不保事项 IV. 保障范围及条款",0,"不需要列出竞争对手最便宜的保费。"],
+["以下哪项不是国家银行对保险业的主要监管目标?",["促进公平、负责、专业的商业行为","监察偿付能力与市场行为","促进货币与金融稳定","保护保险公司股东免于破产"],"国行保护消费者与稳定,不是股东。"],
+["以下哪种情况可以购买团体保险?",["债权人为债务人投保","雇员为雇主投保","父亲为家人投保","雇主为雇员投保"],"典型团体保险:雇主为雇员投保。"],
+["医疗保险中的“免赔额”是指____。",["保单持有人先支付约定金额,余额由保险公司赔付","代理员先支付约定金额","保险公司先支付约定金额","特殊付款安排"],"免赔额 = 自己先承担的部分。"],
+["受保人可向保险公司索取全额赔偿后,再向责任方索取____。",["责任","赔偿","良好行为","以上皆是"],"历年答案:赔偿。(考点:代位求偿防止双重获赔)"],
+["____是为保险标的中合法财务利益投保的法律权利。",["代位求偿","分摊","保险利益","至高真诚"],"法律权利 + 财务利益 = 保险利益。"],
+["客户资料搜集表不包括:",["客户风险概况","病史","现金流分析","人生及财务目标"],"病史填在要保书,不在资料搜集表。"],
+["Amanda,35岁,以 RM50,000 购买单期保费投资联结保单。两年后加额 RM30,000。加额后的总保额是____。",0,"历年答案:RM50,000 × 125% = RM62,500。此题加额不增加保额。"],
+["综合保险公司经营____。",["人寿及普通保险业务","只有普通保险","单一类别","只有人寿保险"],"综合 = 人寿 + 普通。"],
+["海上保险中,保险利益须在____时存在。",["不需要","损失发生","投保时","投保及损失发生"],"海上:损失时;人寿:投保时;其他普通保险:两者。"],
+["保险公司不按原条款接受要保书,而以不同条款承保,这称为____。",["接受","报酬","同意","反要约"],"新条款 = 反要约。"],
+["可保风险的特征不包括____。",["违法及违反公共政策","大量相似风险","保险利益","合理保费"],"违法风险永远不可保。"],
+["在理性环境中,预期回报与风险之间存在____。",["反比","相关","关系","权衡"],"风险回报权衡:高回报要承受高风险。"],
+["投资于特定地区或行业的基金称为____基金。",["债券","平衡","专项","管理"],"特定行业或地区 = 专项基金。"],
+["风险可分为:",["纯风险与基本风险","纯风险与投机风险","基本与特定风险 / 纯风险与投机风险","投机与特定风险"],"两组:基本 vs 特定,纯 vs 投机。"],
+["关于单位信托,以下哪项不正确?",["由国家银行授权及监管","适合私人投资者","适合资金或时间不足的人","提供多元化投资"],"单位信托不受国行监管,所以不正确。"],
+["房地产投资类型不包括:",["住宅","流动资产","商业产业","农业产业"],"流动资产不是房地产。"],
+["做任何投资决定前什么最重要?",["现金流分析","净值分析","现金流及净值分析","个人预算及现金流"],"两者都要:现金流与净值。"],
+["根据投资联结业务指南,新基金的首次发售期不得超过____个月。",["两","四","三","一"],"最多 2 个月。"],
+["投资联结保险业务提供____。",["房地产投资","人命投资","人寿保障及投资回报","人寿保险"],"ILP = 保障 + 投资。"],
+["寿险公司可基于____拒绝或延迟索赔。",["超过通知期限才报案","未透露或失实陈述","迟交文件","未付索赔处理费"],"唯一合理理由:未透露或失实陈述。"],
+["以下哪项只在寿险满期或身故索赔时支付?",["保单股息","临时红利","终期红利","现金红利"],"终期红利 = 只在最后支付。"],
+["投资联结保单中哪项有保证?",["每年投资收入","单位固定价值","房地产基金投资","保额"],"只有保额有保证,单位价值会变动。"],
+["道德准则的基本原则:I. 避免利益冲突 II. 避免滥用职权 III. 防止滥用资料 IV. 防止代理员之间竞争",0,"防止竞争不是道德原则。"],
+["关于默示实际权力,以下哪项不正确?",["真诚行事并合理诠释明示指示","执行明示指示所附带的事项","执行该职位人士通常执行的事项","执行特定行业惯常的事项"],"历年答案:(a)。"],
+["Emily 从 10,000 个单位的基金中提取 RM2,000。单位价格 RM2。她还剩多少单位?",0,"RM2,000 ÷ RM2 = 1,000 单位;10,000 − 1,000 = 9,000。"],
+["保险公司若要质疑寿险契约的有效性,必须证明____。",["虚假资料","不准确的核保资料","错误的事实陈述","隐瞒重要事实"],"隐瞒重要事实 = 可质疑的理由。"],
+["“寿险契约在受保人生前生效超过两年……不得被撤销,除非该陈述涉及重要事项且属欺诈。”这是指____。",["但书","自杀条款","执行条款","不可争议条款"],"2 年规则 = 不可争议条款。"],
+["以下哪项不是分配可分盈余的方法?",["非分红满期索赔","现金红利","保证红利","临时红利"],"非分红保单不参与盈余分配。"],
+["当保险基金的资产超过负债时,就出现____。",["负债","盈余","资产","市值"],"资产 > 负债 = 盈余。"],
+["寿险契约生效超过2年后,不得以下列理由撤销,除了____。",["未透露既有健康状况","体检报告中遗漏的陈述","年龄的疏忽失实陈述","要保书中遗漏的陈述"],"历年 #2 答案:(a)。","历年 #3 同一题答案是 (b)。资料来源冲突,请向培训师确认。"],
+["选择转为缴清保单时,保单以全额保额继续有效直至____。",["保单持有人退保","新保单下次保费到期日","原保单下次保费到期日","保单持有人退休"],"全额保障维持到原保单下次保费到期日。"],
+["保单持有人退保会失去什么?",["只有死亡保障","四分之三储蓄","一半现金价值","所有利益包括人寿保障"],"退保即终止契约,所有利益消失。"],
+["寿险公司会在____时把多缴的款项退还给受保人。",["保险公司利润超出预期","受保人证明公司利润更高","受保人真实年龄小于保单所列","受保人证明现在更健康"],"实际年龄较小 → 多缴保费 → 退还。"],
+["加付保费后,住院及手术保险可扩展至以下利益,除了____。",["器官移植","意外身故利益","整容手术","受保儿童每日监护人津贴"],"整容手术不受保。"],
+["对于不续保或延迟续保的住院手术保单,保险公司须____通知保单持有人。",["保单周年日后至少60天","保单到期前至少30天","保单到期时至少60天","保单周年日前至少30天"],"周年日前 30 天。"],
+["以下哪项不是医疗及健康保险的利益限制?",["减少赔付金额","缩短伤残收入支付期","提高免赔额","索赔时可选择减少保障"],"利益限制在核保时设定,不是索赔时选择。"],
+["若团体保单持有人对受保人没有____,保险公司须向每位受保人提供保障、权利及义务详情。",["至高真诚","保险利益","订约能力","个人利益"],"没有保险利益 → 保险公司直接告知受保人。"],
+["马来西亚的医疗及健康保险由寿险及普通保险公司以____形式承保。",["独立保单","寿险附加险","附加保障","健康福利配套"],"历年答案:独立保单。"],
+["决定是否接受医疗及健康保险要保书的重要核保因素:",["年龄","嗜好","婚姻状况","教育程度"],"年龄影响健康风险。"],
+["____主要提供雇主的医疗福利,是雇员薪酬的重要部分。",["团体个人意外险","团体定期寿险","团体退休储蓄","团体医疗及健康保险"],"雇主医疗福利 = 团体医疗。"],
+["若代理员挪用款项,主方可撤销经代理员订立的契约并____佣金。",["拒付","增加","支付","减少"],"主方可拒付佣金。"],
+["若主方对某事项没有指示,代理员可在惯例明确时遵循____。",["市场协议","法律惯例","市场惯例","习惯做法"],"历年答案:市场惯例。","2024 历年题 (第54题) 同一题答案是“习惯做法”。资料冲突,两种都要认得。"],
+["____列出适用于保险公司及中介(包括代理员)的禁止商业行为。",["2013年金融服务法令附表10","附表11","附表7","附表8"],"附表 7 = 禁止的商业行为。"],
+["保单条款与条件存在是为了____。",["让受保人以批注买回不保风险","让契约双方了解各自的责任、权利与义务","让受保人了解保障与限制","排除战争与恐怖主义"],"条款列明双方的责任与权利。"],
+["____通过直接或经代理员递交已填妥并签名的要保书提出要约。",["代理员","金融公司","投保人","经纪"],"投保人提出要约。"],
+["若没有“意思一致”或从一开始就有根本错误,保险契约被视为____。",["不可执行","无效","可撤销","无作用"],"没有意思一致 = 无效。"],
+["以下哪项不是有效契约的必要因素?",["指定中介","报酬","要约与接受","订约能力"],"中介不是契约要素。"],
+["根据反洗钱客户尽职调查,保险公司必须____。",["通过可靠文件核实客户或受益所有人的身份","实施风险管理","向国行报告超过 RM50,000 的现金交易","向国行报告可疑交易"],"尽职调查 = 核实身份。"],
+["以下哪项不受马来西亚存款保险机构(PIDM)保障?",["回教银行","商业银行","再保险公司","回教保险公司"],"再保险公司不是 PIDM 成员。"],
+["哪项法令规定金融机构的监管?",["2009年中央银行法令","1965年公司法令","2005年存款保险机构法令","2013年金融服务法令"],"2013 年金融服务法令。"],
+["回教保险及保险利益保障制度(TIPS)的目的是____。",["保护保险公司免于破产","保护消费者免受不良代理员侵害","在成员保险公司倒闭时保护保单持有人的合格利益","保护消费者免受经济衰退影响"],"TIPS:成员保险公司倒闭时保护保单持有人。"],
+["推动马来西亚接受回教保险的概念:I. 虔诚 II. 捐献(Tabarru’) III. 保障 IV. 互助",0,"历年答案:捐献、保障、互助。"],
+["当同一受保人有两份或以上保单承保同一损失,分摊原则让已赔偿的保险公司要求其他保险公司____。",["不论保额平均分担","按比例分担赔偿成本","按保额平均分担","按保额比例分担损失"],"各自按比例分担。"],
+["以下哪项不是赔偿契约?",["火险","航空险","全险","人寿保险"],"生命无法估价,寿险不是赔偿契约。"],
+["近因关心损失是否直接由____造成。",["除外风险","受保风险","特殊风险","未受保风险"],"主导原因是否属于受保风险?"],
+["受保人违反真诚原则会导致____。",["无效契约","可撤销契约","不可执行契约","非法契约"],"违反真诚 = 可撤销。"],
+["____保单不是赔偿契约。",["责任","医疗及健康","火险","个人意外"],"个人意外险支付固定利益。"],
+["“启动一连串事件并导致结果的主动有效原因,其间没有来自新的独立来源的力量介入。”这是指____。",["远因","独立原因","单一原因","近因"],"课本对近因的定义。"],
+["将受保人的权利与责任转给新受保人称为____。",["保单转让","利益转移","保单转移","保单收益转让"],"转让。"],
+["哪项最能描述保险的成本稳定作用?",["识别及控制所有风险","承担风险的财务后果","减少损失频率与严重性","释放资金投入企业的生产方面"],"成本确定,资金可用于业务。"],
+["Tabarru’ 的意思是____。",["参与者同意捐出部分供款以履行互助义务","真诚帮助有需要的人","共同赔偿损失的协议","利润分享的商业合作"],"Tabarru’ = 为互助而捐献。"],
+["以下哪项不是纯风险但可保?",["核试验","通货膨胀对经济的影响","台风与飓风","战争"],"历年 #2 答案:(b)。","2024 历年题 (第45题) 类似题答案是“台风与飓风”。资料冲突,请向培训师确认。"],
+["保险中介是指____。",["房地产经纪与发展商","受托人与金融机构","汽车特许经营者与股票经纪","保险经纪、代理员及理财顾问"],"经纪、代理员、理财顾问。"],
+["若保单持有人让保单失效后购买新保单,____。",["新保单会被拒","旧保费转到新保单","条款不受影响","自杀条款与不可争议条款重新开始计算"],"新保单 = 1 年自杀条款与 2 年不可争议期重新起算。"],
+["中介招揽业务时的正确做法:",["有冲突时保护保险公司","任何情况都保护保险公司","始终以至高真诚和诚信经营","先保护自己利益"],"至高真诚与诚信。"],
+["选择正确陈述。",["保险公司不得向保单持有人或受益人收取索赔处理费","允许代理员收取处理费","不阻止代理员收取","可收取处理费"],"不得收取索赔处理费。"],
+["保险公司应____。",["任何情况都不拒赔","任意延迟赔付","不拒绝索赔","不无理拒绝索赔"],"关键词:无理。"],
+["透露核保资料时,代理员应____。",["鼓励客户隐瞒资料","找不会揭露健康问题的诊所","引导答案符合公司要求","避免影响投保人,并说明答案是投保人自己的责任"],"答案是投保人自己负责。"],
+["交付保单能加强客户关系,并有助于____。",["卖另一份保单","防止投诉","帮客户省钱","提高保单持续率"],"持续率。"],
+["销售流程的第二步是____。",["寻找潜在客户","销售展示","进行销售面谈","处理异议"],"历年答案:销售展示。"],
+["根据道德准则,代理员应:I. 避免利益冲突 II. 避免滥用职权 III. 确保记录完整准确 IV. 防止滥用资料",0,"全部四项。"],
+["销售投资联结产品的代理员应定期检讨客户的投资进展,理想是____。",["每年一次","每周一次","每六个月一次","每月一次"],"每年一次。"],
+["消费者意识到风险或需要的购买阶段是哪一个?",["资料搜寻","评估其他保单","问题确认","购买"],"意识到需要 = 问题确认。"],
+["投资联结业务指南规定新基金的首次发售期不得____。",["少于一个月","超过一个月","超过两个月","少于两个月"],"不超过 2 个月。"],
+["关于股票的正确陈述:",["市场蓬勃时回报较低","市场下跌时逆势上涨","下跌时很平稳","市场蓬勃时回报可显著更高"],"牛市 → 股票回报更高。"],
+["若代理员的违约属欺诈,主方可撤销契约并____佣金。",["支付","增加","拒付","减少"],"拒付佣金。"],
+["住院及手术保险为保单持有人提供____,用于必要的医疗。",["暂时伤残期间的收入","确诊重病一次性赔付","完全永久伤残或身故的保额","报销已产生的医疗费用"],"住院手术保险 = 报销医药费。"],
+["除病史及家族病史外,决定是否接受医疗保险要保书的重要核保因素是:",["婚姻状况","年龄","教育程度","嗜好"],"年龄。"],
+["标准住院及手术保险保障____。",["洗肾","器官移植","救护车费用","门诊日间手术"],"救护车费是标准保障,其余是扩展。"],
+["保险公司处理次标准风险的方法,不包括____。",["提供保费折扣","附加或有债务或留置权","其他形式的契约","收取额外保费"],"高风险永远不会有折扣。"],
+["若团体保单持有人对受保人没有____,保险公司须告知每位受保人。",["至高真诚","保险利益","个人利益","订约能力"],"保险利益。"],
+["处理不利风险以避免逆选择的方法:I. 豁免既有疾病除外条款 II. 特定疾病除外批注 III. 额外保费 IV. 利益限制",0,"豁免除外条款会增加风险。"],
+["2013年金融服务法令附表9第3部分关于寿险不可争议条款规定____。",["生效超过2年,可上法庭撤销","生效超过2年,若重要事实被欺诈性遗漏仍可撤销","生效超过2年,若重要事实被错误遗漏可撤销","生效超过2年,完全不能撤销"],"课本规则:2 年后,只有涉及重要事实的欺诈才可撤销。","历年 #3 答案写 (d)。本题库依照金融服务法令/课本 (b)。"],
+["住院计划可加付保费增加利益。以下哪项通常不会包括?",["器官移植","意外身故利益","门诊日间手术及诊询","海外移民保障"],"没有移民保障。"],
+["对高风险人士减少赔付金额、缩短伤残收入期或提高免赔额称为____。",["保障限制","额外保费","除外批注","利益限制"],"利益限制。"],
+["____若被保险公司知道,会导致拒绝签发寿险保单。",["重要事实","特殊事实","简单事实","一般事实"],"重要事实。"],
+["保单持有人可在寿险保单交付后____内退回保单,保险公司须退还保费,扣除体检费用。",["30天","15天","60天","45天"],"15 天冷静期,扣除体检费。"],
+["寿险公司会在____时退还多缴款项。",["公司利润超出预期","受保人证明利润更高","真实年龄小于所列年龄","受保人现在更健康"],"年龄较小 → 多缴 → 退还。"],
+["年龄误述且真实年龄较大时,保险公司会____。",["以违反义务撤销保单","按已缴保费比例调整保额","按真实年龄减少保费","以失实陈述拒赔"],"实际年龄较大 → 保额减少。"],
+["金融服务法令附表9:寿险契约生效超过两年后,不得以下列理由撤销,除了",["未透露既有健康状况","年龄的疏忽失实陈述","要保书中遗漏的陈述","体检报告中遗漏的陈述"],"历年 #3 答案:(b)。","历年 #2 同一题答案是 (a)。资料来源冲突,请向培训师确认。"],
+["消费者购买决策过程包括:I. 问题确认 II. 资料搜寻 III. 评估其他保单 IV. 销售",0,"销售不是消费者的阶段。"],
+["为他人投保寿险时若在投保时没有保险利益,该保单____。",["可撤销","无效","不合法","不可执行"],"无效。"],
+["寿险保单生效超过____年后,保险公司不能以疏忽失实陈述质疑其有效性。",["三","五","二","四"],"2 年。"],
+["以下哪项不是分配盈余的方法?",["非分红满期索赔","现金红利","保证红利","临时红利"],"非分红 = 不分盈余。"],
+["重大疾病保额在确诊后支付,保单会____。",["只要保费已缴仍然有效","在受保人身故后终止","持续到发现另一疾病","自动终止"],"全额赔付后保单终止。"],
+["“Assurance”指承保____会发生的事件。",["预测","必然","不可能","不确定"],"死亡必然发生 = assurance。"],
+["____是结合保障与投资的寿险。",["年金","储蓄保险","投资联结寿险计划","定期寿险"],"ILP。"],
+["最早、最简单、有固定期限且非永久的寿险是:",["定期","投资联结","储蓄","终身"],"定期寿险。"],
+["团体定期寿险的“非分担型”是指保费____。",["全由雇主支付","由雇主补贴","由政府支付","全由雇员支付"],"雇主全付。"],
+["投资联结保险的现金价值无保证,____承担投资风险与回报。",["保单持有人","保险公司","代理员","基金经理"],"保单持有人。"],
+["新雇员自动加入团体寿险的资格是____。",["持有效工作准证的长期及临时员工","任何年龄的健康员工","内部招聘挑选的员工","16至60岁的长期员工"],"长期员工,16–60 岁。"],
+["储蓄保险保费比终身及定期寿险高,因为____。",["要支付生存利益的额外保费","有保证可保选项","用于投资","保证每年续保"],"生存也会赔付。"],
+["以下哪项属于医疗核保中的实质危险?",["工作经历","个人及家族病史","医疗索赔记录","过往保险"],"健康病史 = 实质危险。"],
+["为什么寿险公司用相同因素定价,保费却不同?",["分销渠道与品牌不同","资本储备不同","成本结构、风险评估及投资回报不同","资产估值方法不同"],"成本、风险看法、投资回报。"],
+["分红储蓄保单的保费较高,是因为____。",["风险较高及红利","生存利益及应付红利","期限较长","身故赔付方便"],"生存利益 + 红利。"],
+["高风险人士须为相同保障支付更高保费,这类风险称为____。",["不可保风险","标准风险","低于平均风险","次标准风险"],"次标准风险。"],
+["缴付首期保费并递交要保书、获发正式收据后,投保人在指定期间内受____保障。",["意外死亡","疾病","自杀","重大疾病"],"临时意外身故保障。"],
+["保单持有人身故而没有提名,保险公司会把款项付给____。",["合法提名人","配偶、子女及父母共享","合法遗嘱执行人或遗产管理人","合法受益人"],"没有提名 → 遗嘱执行人/遗产管理人。"],
+["某人驾车时心脏病发撞树身亡。为确定是否属意外身故,保险公司会运用____。",["赔偿原则","保险利益原则","近因原则","代位求偿原则"],"找出主导原因。"],
+["根据2013年金融服务法令,若保单款项超过____,款项无需遗嘱认证即可付给合法受益人,余额付给遗嘱执行人。",0,"RM100,000 以内无需遗嘱认证。"],
+["与其他保单或投资比较时,代理员应____。",["清楚区分各自的特点","劝诱购买较差产品","作出偏颇比较","劝客户取消现有保单"],"公平、清楚地比较。"],
+["代理员取得核保资料的基本原则是确保要保书完整及____。",["问题相关","相关记录准确","个人资料完整","体检报告可信"],"记录准确。"],
+["寿险业建立在信任与诚实上,要求保险____有高度责任感与专业。",["中介","经纪","公司","消费者"],"中介。"],
+["以下哪项投资联结保单的特点在传统寿险中没有?",["保护保单持有人免受投资风险","直接与投资表现挂钩","由政府保证","只投资无保障"],"与基金表现挂钩。"],
+["代理员须确保沟通与交易保密,以免违反____。",["契约前透露义务","2013年金融服务法令","代理合约","2010年个人资料保护法令"],"2010 年个人资料保护法令(PDPA)。"],
+["根据业务守则,代理员不应____。",["在熟悉的保险事务上提供意见","告诉客户其名字由他人提供,除非准备在被要求时透露该人姓名并已获该人同意","在适当时间致电","确保保单适合客户"],"历年答案:(b)。"],
+["关于保额倍数规则(SAM)的正确陈述:",["1–16岁:基本年保费的15倍","56岁及以上:基本年度定期保费的15倍","附加险保费须计入","加额保费须计入"],"历年答案:56 岁以上 → 15 倍。"],
+["选择正确陈述。",["传统保险投资回报较好","ILP 保证回报","投资联结产品更灵活、更透明","传统保险更透明灵活"],"ILP = 灵活、透明。"],
+["非分红保单可分配以下哪项?",["保证红利","现金红利","临时红利","以上皆非"],"非分红 = 没有红利。"],
+["标准死亡率表来自____,不同保单通常用不同表。",["按职业的死亡经验","当地所有寿险公司的综合死亡经验","按种族的死亡经验","本公司保单持有人的经验"],"业界综合经验。"],
+["什么是附加险?",["含意外及伤残利益的终身寿险","加付保费添加到基本保单的附加利益","给经理的额外佣金","凌驾保单条件的条款"],"附加险 = 附加利益。"],
+["在以下哪种情况不存在保险利益?",["父亲为孩子投保","债权人为债务人投保","丈夫为妻子投保","哥哥为妹妹投保"],"兄弟姐妹之间没有自动的保险利益。"],
+["以下哪项不是寿险的基本需要?",["保险公司的每年利润","退休","子女教育","身故后收入损失"],"保险公司利润不是你的需要。"],
+["以下哪项不是可保风险的特征?",["合理保费","违法及违反公共政策","大量相似风险","保险利益"],"违法 = 不可保。"],
+["____是投资于不同资产类别与市场领域的过程。",["对冲","风险控制","利润最大化","分散投资"],"分散投资。"],
+["纯风险的正确定义是什么?",["仅可能造成损失的风险","只影响个人而不影响整个社会","无法用财务衡量","有可能获得财务收益"],"纯风险:损失或无损失,永远不会获利。"],
+["以下哪项不是可保风险的特征?",["不违反公共政策","本质上必须是偶然或意外的","一定是投机风险","具相同损失预期的同质风险暴露"],"可保风险是纯风险,不是投机风险。"],
+["哪种风险处理方法将潜在损失的财务责任转移给另一方,例如保险公司?",["避开风险","转移风险","保留风险","控制风险"],"风险转移。"],
+["就保险而言,火灾损失被分类为____。",["投机风险","基本性风险","纯风险","实体危险"],"火灾 = 纯风险。"],
+["下列哪项描述不正确?",["损失因素是造成损失的主要原因","危险因素会增加损失的可能性","损失的不确定性称为风险","道德风险是通过风险的实体特征来识别的"],"道德风险来自人的态度,不是实体特征。"],
+["造成损失的近因通常是____。",["主要原因","时间上最近的原因","距离上最近的原因","受保风险"],"主导、有效的原因。"],
+["当多份保单承保同一风险时,哪项原则确保保险公司按比例分担损失?",["近因","代位求偿","分摊","保险利益"],"分摊。"],
+["财产保险通常如何衡量赔偿额?",["根据公式","按约定价值","按恢复价值","按首次损失"],"课本答案:恢复价值。"],
+["人寿保险保单要有效,保险利益必须在何时存在?",["仅在保单生效时","索赔时","生效时和索赔时","生效时或索赔时"],"寿险:只需投保时存在。"],
+["2013年金融服务法令附表9如何定义“消费者保险契约”?",["人寿和普通保险合同","个人目的契约,与贸易、业务或职业无关","房主为其财产签订的契约","个人为任何目的购买的保单"],"只限个人目的。"],
+["未受保风险与除外风险有何区别?",["未受保风险被排除在保单之外","未受保风险总是比除外风险低","除外风险不能由任何保单承保","除外风险不能承保,未受保风险可加付保费增加承保"],"未受保可买回;除外不可。"],
+["以下哪一项用于确定引发一连串事件并导致损失的主要或直接原因?",["近因","根本原因","系统性原因","间接原因"],"近因。"],
+["若投保人欺诈性违反真诚原则,保险公司不可以采取哪项补救措施?",["撤销整个保单","撤销保单并保留已缴保费","忽略违约并允许保单生效","拒绝特定索赔但允许保单继续生效"],"课本答案:(d)。"],
+["以下哪一个对他人的生命不具有保险利益?",["孩子对父母","雇主对雇员","受抚养人对照顾者","房东对房客"],"房东与房客之间没有保险利益。"],
+["以下哪一项不是马来西亚国家银行的功能?",["提高保险代理团队的专业水平和商业行为","促进保险公司公平、负责、专业的行为","保护金融消费者权益","密切关注偿付能力和市场行为"],"代理专业水平由业界组织推动,例如 LIAM。"],
+["哪项新立法取代了1996年保险法令?",["2013年伊斯兰金融服务法令","2013年金融服务法令","2013年保险法令","2013年金融服务管理局"],"2013 年金融服务法令取代 1996 年保险法令。"],
+["消费者教育计划(CEP)的主要目标:I. 做出明智决定 II. 选择最合适的产品 III. 了解权利与责任 IV. 最大化购买保险的利润",0,"不是为了利润。"],
+["以下哪一个是金融消费者的替代性争议解决渠道?",["金融服务监察员(OFS)","保险公司投诉部门","马来西亚竞争委员会","马来西亚公司委员会"],"OFS。"],
+["根据反洗钱准则,需要对谁进行客户尽职调查?",["保险中介或代理员","理财顾问","客户或受益所有人","金融服务提供商"],"客户或受益所有人。"],
+["2010年个人资料保护法令不将以下哪一项视为“个人资料”?",["有关商业交易的个人信息","在社交媒体上发布的个人信息","敏感个人资料","对资料当事人的意见表达"],"课本答案:(b)。"],
+["有效契约的成立需要哪些要素?I. 要约与接受 II. 建立法律关系的意图 III. 订约能力 IV. 符合法律要求的形式 V. 报酬",0,"全部五项。"],
+["哪一条款描述保单在什么情况下生效,并列明触发索赔的事件?",["免责条款","执行条款","代位求偿条款","分摊条款"],"执行条款。"],
+["下列情况会使保险契约无效,除了:",["签订时没有保险利益","没有共识或存在根本错误","未履行契约前的先决条件","填写要保书时的无心失实陈述"],"无心失实陈述 → 可撤销,不是无效。"],
+["契约具有法律约束力的关键特征是:",["各方自由缔约","建立法律关系的意图","出于善意的协议","书面盖章"],"建立法律关系的意图。"],
+["保单的“执行条款”描述:",["受保人资料","承保范围","除外风险","保单条件"],"承保范围。"],
+["什么是可撤销契约?",["一方或双方违约","根本错误导致无效","具约束力但一方有权撤销","一方无权订约"],"有效,直到无辜一方撤销。"],
+["以下哪一项通常不会出现在保单附表中?",["受保人姓名地址","保险期限","保费金额","除外责任"],"除外责任写在保单条文。"],
+["以下哪项最能描述不可执行的契约?",["一方拒绝仍有约束力","有效契约,但无法在法庭上执行","有效且不违法","合法但无约束力"],"有效,但无法通过法庭执行。"],
+["保险契约中的“报酬”是什么意思?",["临时保单","为获得保险而支付的保费","支付索赔","支付保额的承诺"],"保费。"],
+["马来西亚的契约受哪项法律管辖?",["1965年货物销售法令","2013年金融服务法令","1950年契约法令","1996年保险法令"],"1950 年契约法令。"],
+["以下哪项关于保险代理员角色的描述不正确?",["销售保险产品和服务","是保险公司的代理人,受其约束","代表多家保险公司并为受保人挑选最合适的保险","将代表主方收取的款项全数交给主方"],"那是经纪,不是代理员。"],
+["什么情况下可以终止代理?I. 交易完成 II. 期限届满 III. 双方同意 IV. 死亡、精神失常或破产 V. 法律使代理契约非法",0,"全部五项。"],
+["什么情况下代理员可以将任务委托他人?",["任何情况都不能","具保付代理员身份","委托的工作纯属文书工作","副代理员曾任主方代理"],"只有纯文书工作。"],
+["委托人对代理员的职责:I. 保护代理员免受竞争 II. 持续培训 III. 支付约定报酬 IV. 对代理员作出弥偿",0,"支付报酬与弥偿。"],
+["以下哪些属于禁止的商业行为?I. 误导或欺骗 II. 施加不当压力或强迫购买 III. 向他人透露机密资料 IV. 要求为未经请求的产品付款",0,"全部四项。"],
+["以下哪一项不是医疗与健康保险/回教保险(MHIT)产品?",["团体人寿保险","长期护理保险","医疗费用报销保险","牙科保险"],"团体寿险是人寿保障,不是 MHIT。"],
+["保险公司控制医疗索赔成本的方法:I. 內部限额 II. 手术程序附表 III. 最长赔偿期限 IV. 时限",0,"全部四项。"],
+["医院收入保险支付哪些利益?",["因病无法工作时替代收入","住院期间按日发放的固定津贴","报销住院医疗费","确诊严重疾病一次性赔付"],"住院每日现金津贴。"],
+["修订后的《医疗健康保险业务指南》的主要目的?",["提高高风险人士保费","减少索赔成本","规定寿险及普通保险公司须遵守的最低标准","引入新限制"],"最低标准。"],
+["哪种 MHIT 保单的续保权由保险公司决定?",["每年可续保","保证每年可续保","不可续保","定期"],"每年可续保:由保险公司决定。"],
+["保单持有人何时可以退保人寿保险保单?",["保单生效后任何时间","缴纳三年保费之后","保费到期日的第三个周年","保单生效两年后"],"第10版:生效后任何时候(若保单提供退保价值)。","历年 #1 和 2024 历年题问旧版说法,答案是 3 年。要看清题目字眼。"],
+["未成年人何时具备投保能力?I. 满10岁为自己投保 II. 满10岁经父母或监护人同意,为有保险利益的他人投保 III. 满16岁为自己投保 IV. 满16岁为有保险利益的他人投保",0,"全部四项。10–15 岁须父母或监护人书面同意。"],
+["以下哪项关于寿险保险利益的陈述不正确?",["目的是防止因他人死亡或伤残获利","若没有保险利益,寿险契约无效","保险利益必须在契约生效时存在","保险利益指在受保人身故或生存时支付保险金"],"那是利益给付,不是保险利益的定义。"],
+["代理员邀请他人投保时应透露:I. 保险公司名称 II. 与保险公司的关系 III. 保险公司收取的保费 IV. 与他签约的好处",0,"不包括“跟我买的好处”。"],
+["一个人对以下何人具有保险利益:I. 配偶 II. 投保时未成年的子女或被监护人 III. 雇员 IV. 投保时他完全或部分依赖其提供生活或教育费用的人",0,"全部四项。"],
+["根据金融服务法令附表8第12段,普通保险公司应如何处理保费退款?",["付给代理员转交","必须直接付给保单持有人,不得付给代理员或中介","存入暂收账户","可自行决定扣留"],"直接付给保单持有人。"],
+["下列哪项不用于决定缴清保单的保额?",["公认精算原则","保单持有人的年收入","公平对待保单持有人","保单的退保价值"],"收入不是因素。"],
+["购买人寿保险的主要目的是____。",["补充退休收入","减轻受保人的经济负担","在家庭经济支柱过早去世时保护受扶养人","增加储蓄"],"保护受扶养人。"],
+["退休年金对以下哪类人特别有吸引力?",["有大家庭的人","患重病的人","长寿风险低的人","长寿风险高的人"],"活得久 → 需要终身收入。"],
+["以下哪种保险没有储蓄成分?",["终身寿险","储蓄保险","定期寿险","以上皆非"],"定期寿险。"],
+["终身寿险与定期寿险的区别在于____。",["终身寿险保费每年增加","65岁后无需缴费","终身寿险保费总是较低","终身寿险累积现金价值,定期寿险没有"],"现金价值。"],
+["以下是人寿年金的优点,除了____。",["缺乏流动性","提供终身收入","确保退休财务保障","可能享有税务优惠"],"缺乏流动性是缺点。"],
+["关于分红寿险中不同类型红利,哪项正确?",["复归红利始终有保证并在退保时支付","终期红利每年发放","现金红利是非保证红利,由保险公司每年决定","临时红利只在保单维持超过5年时支付"],"现金红利:非保证,每年宣布。"],
+["无需可保性证明但需调整保费,将定期保险转为永久保险的选项称为____。",["保证适用性选项","保证可保性选项","保证可转换性选项","保证永久性选项"],"可转换性选项。"],
+["寿险保单中的“豁免保费”条款是什么意思?",["免除自杀条款","免费购买额外保险","在永久伤残时代缴未来保费","由代理员代缴保费"],"伤残后豁免未来保费。"],
+["在分红保单中,保单持有人以以下形式分享利润:I. 红利 II. 薪水 III. 抽奖 IV. 花红",0,"红利与花红。"],
+["以下哪项关于寿险保费的陈述不正确?",["费率表按年龄和期限制定","净保费是纯风险保费加利息","毛保费是净保费加管理费用和利润附加","分红寿险不会收取额外保费或附加费用"],"分红保单也有附加费用。"],
+["即使死亡率随年龄增加,仍收取统一保费的方法是:",["固定支付系统","均衡保费系统","递增保费系统","递减定期保险"],"均衡保费系统。"],
+["经营保险业务的费用分为三种,除了____。",["初始费用","更新费用","终止费用","采购费用"],"初始、更新、终止。"],
+["以下哪项不是影响死亡率的主要因素?",["年龄","性别","种族","职业"],"种族不用作因素。"],
+["精算师定价寿险保费时考虑的主要因素:I. 死亡率 II. 发病率 III. 投资回报 IV. 管理费用",0,"全部四项。"],
+["确定高风险特征时会考虑:I. 生活习惯 II. 性别 III. 职业 IV. 财务稳定性",0,"性别不是高风险特征。"],
+["以下哪种方法不是保险公司处理不利风险时采用的?",["收取额外保费","推荐替代计划","减少保障利益","提供保费折扣"],"高风险不会有折扣。"],
+["次标准风险最恰当的描述是____。",["标准条款下可接受","因健康或职业危害需按特殊条款承保的风险","任何情况都不接受","不可承保,如绝症患者"],"特殊条款承保。"],
+["下列哪一项核保因素与道德风险无关?",["审查是否有保险利益","保额是否与经济状况或收入相符","申请的保险产品类型","是否在其他公司持有多份保单"],"产品类型与道德风险无关。"],
+["以下哪项核保因素与实质危险因素无关?",["身高和体重","家族病史","收入能力","生活方式"],"收入属于财务核保。"],
+["寿险财务核保的目的是什么?",["评估实质危险","评估潜在客户的道德风险","筛选财务良好的客户","确保有保险利益"],"超额投保 → 道德风险。"],
+["哪份文件是寿险核保的主要信息来源?",["要保书","财务报告","代理员报告","销售示例"],"要保书。"],
+["保险代理员在核保流程中的作用是什么?",["计算保费","提供财务建议","协助填写要保书","确保透露所有重要事实,让客户和核保人员做出明智决定"],"完整透露。"],
+["寿险公司何时承担寿险风险?",["发出接受函并收到首期保费时","收到完整要保书时","核保人员评估后","保单签发或交付后"],"接受 + 首期保费。"],
+["寿险索赔可能在以下情况发生,除了:",["受保人身故","受益人身故","人寿保险满期","重大疾病"],"受益人身故不会触发索赔。"],
+["对于失踪人口,法院在多久后可发布法定死亡推定?",["1年","3年","5年","7年"],"7 年。"],
+["死亡索赔需要哪些文件?I. 死亡证明 II. 尸检报告 III. 法定死亡推定 IV. 已故者身份证号码",0,"全部四项。"],
+["死亡索赔必须在收到通知后____内支付,否则须支付复利。",["15天","30天","60天","7天"],"60 天。"],
+["理赔部门处理哪些索赔?I. 死亡 II. 完全永久残疾 III. 严重疾病 IV. 个人意外附加险",0,"全部。"],
+["以下哪一项不属于马来西亚寿险业道德与行为准则的一部分?",["行为准则指南","寿险销售道德与行为准则","人寿保险业务声明","股票市场投资指南"],"股票市场指南不属于其中。"],
+["根据道德与行为准则,保险公司的一项关键责任是?",["每季向国行提交违规报告","捐出部分利润","所有员工持博士学位","以上皆非"],"向国行报告违规。"],
+["根据《服务指南》,以下哪一步不属于“购买前”阶段?",["了解客户需求","解释产品特点与不保条款","协助客户填写要保书","提供产品透露文件"],"填写要保书属于“决定购买”阶段。"],
+["“决定购买”阶段的主要目标?",["了解需求","协助完成购买并确保理解条款","持续服务","以上皆非"],"在理解条款下完成购买。"],
+["保单生效期间,代理员不应采取哪项步骤?",["协助续保","指导索赔","进行新的全面客户需求分析","协调更换代理员"],"不需要重新做全面需求分析。"],
+["哪些因素促使投资联结保险在马来西亚日益普及?I. 年轻人开始探索保险 II. 偏好传统保险 III. 投资选择灵活 IV. 潜在回报比传统保险高",0,"灵活 + 潜在回报较高。"],
+["以下哪项是对投资联结寿险的正确描述?",["提供终身保障的分红保单","资本保证保单","提供最低回报的储蓄保单","提供保障与投资机会的保单"],"保障 + 投资。"],
+["在世界某些地区,投资联结寿险也被称为:I. 共同基金连结保险 II. 单位连结寿险 III. 变额寿险 IV. 万能寿险",0,"课本答案:以上全部。"],
+["投资联结基金由以下机构管理:I. 保险公司内部专业经理 II. 外包指定的基金经理 III. 单位信托公司 IV. 保险公司董事会",0,"内部或指定的基金经理。"],
+["投资联结保险对消费者的主要优势:I. 人寿保障 II. 灵活的基金选择 III. 可按需定制 IV. 可作遗产规划工具",0,"全部四项。"],
+["单期保费 ILP 与定期保费 ILP 相比,哪项描述正确?",["须定期持续缴费","较多资金用于保障","一次性缴费,通常较高比例用于投资","可随需要调整保障"],"一次性缴费,侧重投资。"],
+["马来西亚投资联结保单的双重定价法是:",["单一价格,不同交易费","两个价格:买入价(回购)与卖出价,通常相差约5%","按资产净值另收费用","2006年起采用"],"买卖差价约 5%。"],
+["保单中未分配保费的主要用途是什么?",["投资所选基金","支付保险成本及基金管理费","增加户口价值","支付代理佣金及其他管理费用"],"佣金 + 管理费。"],
+["以下哪项属于由未分配保费支付的管理费用?",["每月保单费用","累积投资价值","购买基金单位","技术升级"],"课本答案:(d)。"],
+["在投资联结保单中使用平均成本法的目的是什么?",["减少继续缴费的需要","保证获利","确保固定回报","通过分散投资时间降低市场波动的影响"],"分散时间,平滑波动。"],
+["投资联结产品设计的一般条件:I. 名称须清楚表明是投资联结产品 II. 资本保证须由持牌银行担保 III. 必须提供最低回报保证 IV. 可加附加险,以单位扣除或另缴保费",0,"不需要保证最低回报。"],
+["“在不同资产中分散风险”:I. 投资多种资产降低整体风险 II. 基金经理声誉是主要因素 III. 多元化,减少单一资产曝险 IV. 减少市场波动影响",0,"II 与主题无关。"],
+["关于最低分配率(MAR):I. 分配到基金的平均比例 II. 分配到基金的最低比例 III. 第1–3年 MAR 为60% IV. 第7–10年 MAR 为100%",0,"最低比例;第 1–3 年 60%。"],
+["关于年度基金管理费(FMC),哪项正确?",["可不考虑投资策略设定","所有基金上限为资产净值2%","非强制,直接向保单持有人收取","必须通过单位定价法向基金收取"],"通过单位定价收取。"],
+["保险公司如何通过管理投资联结基金获取收入?",["每年收取固定行政费","自行设定回报目标","每笔投资收佣金","根据管理方式向基金价值收取费用"],"按基金价值收 FMC。"],
+["保险公司征收 FMC 时必须遵守哪项规定?",["购买单位前从保费扣除","可按任何费率收取","只在获利时收取","须反映投资策略并通过单位定价法向基金收取"],"反映策略,通过单位定价。"],
+["代理员应了解产品说明书的必备知识:I. 是教育工具 II. 须使用公司批准的说明书并解释 III. 显示现金流变动及费用影响 IV. 副本无需包含在保单文件中",0,"IV 错误,副本须包含在保单文件中。"],
+["产品说明书中的情境 X 和情境 Y 代表什么?",["基金的假设回报率","保险公司设定的波动情境","预期保费","预测通胀率"],"假设回报率。"],
+["情境 X 和情境 Y 所使用的规定回报率是多少?",["2%和5%","1%和4%","3%和6%","2%和6%"],"2% 和 5%。"],
+["使用情境 X 和 Y 的主要目的是什么?",["说明不同假设回报对户口价值的潜在影响","展示过去表现","预测保证回报","设定分配比率"],"说明可能结果。"],
+["关于保险公司提供的产品资料:I. 是说明书和基金概况表以外的额外资料 II. 包括公告、宣传材料、广告、手册 III. 代理员须在销售前或销售时提供 IV. 代理员可用自己设计的手册",0,"绝不能用自制手册。"],
+["关于基金表现报告,代理员的职责:I. 告知每年至少收到一次 II. 协助理解关键信息 III. 解答疑虑 IV. 协助做出明智决定",0,"全部四项。"],
+["什么是基金概况表?",["年度结单","基金概览:投资目标、风险等级、费用、过往表现及持仓","每年基金表现报告","策略变化分析"],"基金概览。"],
+["代理员在单位价格公布方面的职责:I. 告知官网每日公布资产净值 II. 协助以其他方式查询 III. 协助获取历史资料 IV. 建议何时转换基金",0,"不建议转换时机。"],
+["带有保障期限延长功能的投资联结产品是:",["初始保障期结束后自动续期,每5或10年一次至100岁,无需重新核保","初始期中途续期","续期须核保","续期只需医疗核保"],"初始期后自动续期,无需重新核保。"],
+["保障延长功能的披露与行为重点:I. 以浅白语言说明及限制 II. 清晰不误导 III. 披露机制、保费、程序及是否重新核保 IV. 披露初始期与延长期所需金额",0,"全部四项。"],
+["客户多久必须收到一次投资联结保单价值报表?",["每两年","客户要求时","每季","每年"],"每年一次。"],
+["代理员应确保客户了解年度报表中哪项关键信息?",["代理佣金","保单状态及可持续性测试结果","基金经理简介","新产品清单"],"状态 + 可持续性测试。"],
+["保险公司应在何时要求保单持有人确认最终保费?",["到期前30天","下次审查前60天","延长期开始前至少90天","财政年度结束时"],"延长期前 90 天。"],
+["若保单持有人同意增加保费,应披露什么?",["取消通知书","契约终止函","在定期保费审查期间发出提醒","代理佣金报告"],"保费审查时提醒。"],
+["单期保费投资联结(SP-IL)寿险如何缴费?",["整个保单期定期缴付","一次性支付总额","分布在首10年","无需缴费"],"一次性。"],
+["定期保费投资联结(RP-IL)保单持有人的主要目标是什么?",["最大化回报","获得寿险保障","为家属提供经济保障","累积财富"],"课本答案:(c)。"],
+["SP-IL 的最低基本单期保费通常根据什么?",["年龄与健康","目标市场","基金表现","个别保险公司的自主决定"],"由保险公司决定。"],
+["SP-IL 保单的哪一部分是一次性付款且通常不超过5%?",["保额","预付费用","保险费用扣除","最低保障额"],"预付费用 ≤ 5%。"],
+["SP-IL 保单中的基本保额(BSA)代表什么?",["单位现值","最低保障金额","已缴保费总额","已分配与未分配保费之和"],"最低保障。"],
+["SP-IL 预付费用为单期保费的4%。若单期保费为 RM15,000,预付费用是多少?",0,"RM15,000 × 4% = RM600。"],
+["SP-IL 保单中保险费用(COI)扣除的目的是什么?",["支付投资管理费","增加保额","降低投资损失","弥补户口价值与保额之间的差额"],"COI 弥补差额(风险总额)。"],
+["SP-IL 保单中的 COI 扣除何时停止?",["当户口价值达到或超过 BSA 时","经过特定年数后","基金表现良好时","保单持有人要求时"],"没有差额 → 没有 COI。"],
+["SP-IL 的 COI 扣除额如何随户口价值增加而变化?",["保持不变","按比例增加","逐渐减少","随市场波动"],"差额变小 → COI 减少。"],
+["户口价值 RM9,500,基本保额 RM10,000,当前 COI 状态是?",["按 RM500 风险总额收取","按整个基本保额收取","不收取","永久豁免"],"RM10,000 − RM9,500 = RM500。"],
+["户口价值 RM9,500,基本保额 RM10,000,风险总额(SAR)是多少?",0,"SAR = BSA − 户口价值。"],
+["户口价值 RM9,500,基本保额 RM10,000,何时停止收取 COI?",["户口价值等于或高于基本保额时","低于基本保额时","保单到期时","保额调整时"],"户口价值达到 BSA 时。"],
+["投资联结保险的其中一个好处是什么?",["只提供人寿保险","保证回报","可获得汇集和多元化的投资基金","自行管理投资"],"汇集与多元化。"],
+["投资联结计划的哪个部分由专业基金经理管理?",["保单费用","保险费用","保额","投资基金"],"投资基金。"],
+["正式的产品说明书通常包含什么?",["只有基金名称与预期回报","建议摘要:计划、附加保障、保额、总保费及利益说明","过去表现与排名","佣金结构"],"建议摘要。"],
+["在什么情况下会为保单持有人应用保费假期?",["宣布红利时","未收到到期保费,但户口价值仍足以支付保险费用和其他费用","回报超过高情境","更换基金时"],"由户口价值支付费用。"],
+["关于投资联结保单的“可及性”好处,哪项正确?",["获得基金经理的选股建议","获得由专业经理管理的多元化基金","直接投资股市","获得专家投资技巧"],"专业管理的多元化基金。"],
+["投资联结保单的好处:I. 多元化,风险特征较好 II. 灵活性 III. 收取固定名义费用 IV. 保险公司为保单持有人隔离市场风险",0,"多元化 + 灵活。"],
+["谁需要签署确认已收到并理解产品说明书和产品透露文件?",["保险公司代表","预期的保单持有人","主管","基金经理"],"客户签署。"],
+["RP-IL 与传统终身分红计划比较,谁主要承担投资风险?",["RP-IL 共同承担/终身由保单持有人","RP-IL 由保险公司/终身共同","RP-IL 由保单持有人承担/终身与保险公司共同承担","RP-IL 共同/终身由保险公司"],"ILP:自己承担;分红:共同承担。"],
+["在投资联结保险中,部分提款对身故赔偿金通常有什么影响?",["固定不受影响","再投资可能增加","通常会因提款金额而减少","只在公司亏损时减少"],"会减少。"],
+["投资联结寿险的单位价值与什么的表现挂钩?",["保证现金价值","传统终身寿险","基础资产","固定保险费用"],"基础资产。"],
+["与投资连结寿险相关的费用(保单费、保险费、基金管理费)____。",["保证且固定","经常调整","整个期间保持稳定","可在提前通知后调整"],"提前通知后可调整。"],
+["投资投资联结基金之前需考虑哪些主要因素?",["投资目标、风险承受能力和保障","资金的易获取性、投资期限和税务处理","可用资金、表现和风险回报","收入、增长和安全"],"课本答案:(b)。"],
+["以下哪项投资目标关注稳定的收入流?",["有保障","收入","增长","安全"],"收入。"],
+["风险评估涉及什么?",["评估财务资源","确定投资期限","分析税务影响","了解客户的风险承受能力和偏好"],"风险承受能力。"],
+["为什么较长投资期限通常与较高风险承受能力相关?",["有更多时间从损失中恢复","投资者不再关心回报","长期投资无风险","短期目标较易实现"],"有时间恢复。"],
+["进行现金流量和净值分析的目的是什么?",["评估基金表现","确定资金可获取性","评估客户财务状况及可用于投资的资金","了解税务影响"],"可用资金。"],
+["税务处理如何影响投资的整体回报?",["没有影响","会显著降低回报","提高回报","只影响特定投资"],"降低回报。"],
+["风险与潜在回报的关系是什么?",["较高风险通常伴随较高潜在回报","较高风险导致较低回报","两者无关","较低风险伴随较高回报"],"风险回报权衡。"],
+["不同投资风格对应的主要风险属性有哪些?",["非常保守、保守、平衡、激进、非常激进","保守、激进、非常激进","保守、平衡、非常激进","非常保守、保守、平衡"],"五种属性。"],
+["对投资联结计划进行风险评估时需考虑:I. 年龄、收入、财务稳定性 II. 家庭及财务状况 III. 投资经验与知识 IV. 风险承受能力与投资取向",0,"全部四项。"],
+["为什么长期投资者可以持有流动性较低的投资?",["只投资政府债券","不需要立即动用资金","追求高风险高回报","只投资房地产"],"不急需用钱。"],
+["为什么指南要求保险公司按基金概况表列明的目标投资?",["更多灵活性","确保投资符合保单持有人的预期","最大化回报","减少行政成本"],"符合预期。"],
+["若首次发售期内无法达到最低基金规模,保险公司必须?",["延长发售期","退还所有款项连同利息或投资收益","调整策略","降低最低规模"],"退款连收益。"],
+["与政府债券基金相比,公司债券基金有____。",["较低收益与较低风险","较高收益与较高风险","大致相同","较长期限"],"较高收益,较高风险。"],
+["下列哪项是投资货币市场工具的优点?",["抵御通胀","资本增值潜力高","回报高于股票及固定收益","稳定,价值波动极小"],"稳定。"],
+["投资房地产投资信托基金(REITs)的主要好处是?",["高资本增长","通过接触房地产市场实现多元化","不受利率影响","管理费极低"],"接触房地产市场。"],
+["单期保费投资联结寿险与单位信托在流动性方面的差异?",["两者都高度流动","SP-ILP 更流动","SP-ILP 可能有最低投资年期并对提前提款收罚款,单位信托流动性高","单位信托有提款罚款"],"SP-ILP 流动性较低。"],
+["单期保费投资联结寿险与单位信托在受托安排上的主要差异?",["单位信托没有受托人","两者都由保险公司作受托人","SP-ILP 由保险公司作受托人,单位信托可能用独立受托人","只有单位信托有受托人"],"保险公司 vs 独立受托人。"],
+["投资股票的优点:I. 资本增值与股息 II. 多元化 III. 流动性 IV. 地域分散",0,"课本答案:I、II、III。"],
+["固定收益证券的特征:I. 包括政府及公司债券 II. 稳定利息收入 III. 风险较股票低 IV. 利息比股息更可预测",0,"全部四项。"],
+["按风险与回报从低到高排序:",["货币市场工具、固定收益证券、股票","股票、固定收益证券、货币市场工具","货币市场工具、股票、固定收益证券","固定收益证券、货币市场工具、股票"],"货币市场 → 债券 → 股票。"],
+["选择正确陈述:I. 有多种基金 II. 按目标与承受能力选择 III. 价值与所选基金表现挂钩 IV. 保险公司承担投资风险",0,"投资风险由保单持有人承担,IV 错。"],
+["以下哪种基金风险最低?",["股票基金","固定收益基金","平衡基金","专项基金"],"固定收益基金。"],
+["指数基金的主要特征是什么?",["回报潜能更高","主要投资房地产","需要积极管理","复制特定市场指数的表现"],"复制指数。"],
+["哪种基金只投资于符合道德和宗教准则的项目?",["股票基金","固定收益基金","符合伊斯兰教义的基金","全球基金"],"伊斯兰基金。"],
+["哪种基金适合注重保本和创造收入的投资者?",["股票基金","固定收益基金","伊斯兰基金","平衡基金"],"固定收益基金。"],
+["平衡基金旨在平衡以下两者:",["资本增长与创造收入","高风险与投机","现金与流动资产","短期收益与高流动性"],"增长 + 收入。"],
+["以下哪项不是投资联结基金的风险?",["市场波动","流动性限制","信用风险","更高回报的潜能"],"那是好处。"],
+["关于全球基金:I. 投资全球包括新兴市场 II. 投资多种资产 III. 承担货币、政治等风险 IV. 回报比所有其他基金高",0,"IV 错误。"],
+["为什么代理员必须通过 CEILLI 才能营销投资联结产品?",["提高效率","增加高价销售机会","掌握道德销售知识","确保只有经适当培训及授权的代理员营销这些产品"],"授权。"],
+["国家银行投资联结指南的目标:I. 公司治理与专业 II. 专业正确的销售行为 III. 为保单持有人带来最大回报 IV. 提高透明度与透露",0,"不是为了最大回报。"],
+["实施最低分配率(MAR)的目标:I. 保护户口价值 II. 制定可持续性测试标准 III. 加强产品说明书格式 IV. 优化回报与公司利润",0,"不是为了利润。"],
+["保险公司须透露的产品设计信息:I. 产品及基金名称反映投资策略 II. 提供的选项与保证 III. 是终身或定期寿险 IV. 佣金结构",0,"课本答案:I 和 II。"],
+["保费假期期间扣除附加险费用前,需要什么同意?",["口头同意","书面同意","无需同意","代理员同意"],"书面同意。"],
+["修改现有费用和收费前必须提前多久通知?",["一个月","两个月","三个月","六个月"],"3 个月。"],
+["保险公司可向投资联结基金收取的费用:I. 佣金、税费、审计及估价费 II. 托管费及对冲成本 III. 一般管理费用 IV. 系统投资",0,"只限管理基金的直接费用。"],
+["回教保险经营者须多久对投资联结回教基金资产估值?",["每周","每月","每年","每日"],"每日。"],
+["保险公司提供启动资金协助投资联结基金启动时必须考虑什么?",["须有退出策略以管理风险敞口","为提款提供流动性","限制外国资产","维持足够流动性"],"退出策略。"]
+];
+const Y24=[
+["P","The three functions of insurance which are interrelated are:",["Identify, analyse and control of risk","Risk transfer, equitable premiums and creation of common pool","Financial protection, cost stabilisation and compelled savings","Retain, control and transfer of identified risks"],"b","Insurance mechanism: transfer risk, pool funds, charge fair premiums.","保险的三个相互关联的功能是:",["风险的识别、分析和控制","风险转移、公平保费和设立共同基金","财务保障、成本稳定和强制储蓄","保留、控制和转移已识别的风险"],"保险机制:转移风险、汇集基金、收取公平保费。"],
+["P","An insured is not required to disclose any fact that ____ if there are no specific questions in the proposal form.",["Increases the risk to the insurer","Diminishes the risk to the insurer","Affects insurer’s rating of the risk","Influences the decision to accept the risk"],"b","Facts that reduce risk need not be disclosed.","若要保书中没有具体问题,受保人无需透露____的事实。",["增加保险公司风险","降低保险公司风险","影响保险公司对风险的评级","影响接受风险的决定"],"降低风险的事实无需透露。"],
+["R","____ is NOT a money laundering activity.",["Layering","Placement","Integration","Consolidation"],"d","3 stages: placement, layering, integration.","____不是洗钱活动。",["分层","放置","整合","合并"],"洗钱 3 阶段:放置、分层、整合。"],
+["R","Insurers are regulated by BNM for the following reasons, EXCEPT: I. Liaise with professional organisations II. Address insufficient insurance knowledge III. Offer insurance to the public IV. Ensure insurer solvency and reasonable rates",["I and III","I and IV","II and III","III and IV"],"c","Past-year key: (c).","保险公司受国家银行监管的原因,除了:I. 与业内专业组织联络 II. 解决保险知识不足 III. 为公众提供保险 IV. 确保偿付能力及合理费率",0,"历年答案:(c)。","Logic check: I and III also look like non-reasons. Confirm with your trainer.","逻辑检查:I 和 III 看起来也不是监管原因,请向培训师确认。"],
+["R","Agency by ____ is when the agency relationship is formed retrospectively.",["Necessity","Ratification","Mandatory","Agreement"],"b","Approved after the act = ratification.","____代理是指代理关系在事后追溯成立。",["必要","追认","强制","协议"],"事后批准 = 追认。"],
+["M","Which risk category under medical and health insurance gets special terms, higher premium, coverage limits or both?",["Special risk","Standard risk","Declined risk","Sub-standard risk"],"d","Special terms = sub-standard.","医疗及健康保险中,会被施加特殊条款、较高保费或保障限制的风险类别是?",["特殊风险","标准风险","拒保风险","次标准风险"],"特殊条款 = 次标准风险。"],
+["L","Although a life policy has been in force for more than 2 years, the insurer can still contest its validity if:",["The doctor’s medical report is misleading","There is erroneous misrepresentation","A proposal form statement is inaccurate","There is deliberate non-disclosure of a material fact"],"d","After 2 years only fraud (deliberate) counts.","寿险保单生效已超过2年,保险公司在以下情况仍可质疑其有效性:",["医生报告有误导性","存在错误的失实陈述","要保书陈述不准确","故意不透露重要事实"],"2 年后只有欺诈(故意)才算。"],
+["R","Insurance brokers, financial advisers and registered adjusters must be incorporated as:",["Private companies","Public companies","Unlimited companies","Registered companies"],"a","Intermediaries = private companies. (Insurers = public companies.)","保险经纪、理财顾问及注册理算师必须注册为:",["私人公司","公众公司","无限公司","注册公司"],"中介 = 私人公司。(保险公司 = 公众公司)"],
+["P","The first stage in risk management is",["Analysis","Control","Identification","Transfer"],"c","Identify → analyse → control.","风险管理的第一阶段是",["分析","控制","识别","转移"],"识别 → 分析 → 控制。"],
+["R","Insurance agencies in Malaysia are created through ____.",["Implied agreement","Agency by ratification","Agency of necessity","Appointment by express agreement"],"d","Agents are appointed by written (express) agreement.","马来西亚的保险代理关系是通过____建立的。",["默示协议","追认代理","必要代理","明示协议委任"],"代理员以书面(明示)协议委任。"],
+["L","After the insured dies, a claimant must ____ to begin the claim process.",["Make a police report","Complete a claim form","Submit the death certificate","Notify the insurance company or agent"],"d","Step one is always notification.","受保人身故后,索赔人必须____才能开始索赔流程。",["向警方报案","填写索赔表","提交死亡证明","通知保险公司或代理员"],"第一步永远是通知。"],
+["M","What cover can be extended under a hospital and surgical policy with extra premium?",["Life insurance","Disability income","Overseas cover","Mental disorder"],"c","Past-year key: overseas cover.","加付保费后,住院及手术保单可扩展哪类保障?",["人寿保险","伤残收入","海外保障","精神疾病"],"历年答案:海外保障。"],
+["I","Which list is arranged from lowest to highest risk?",["Equity, derivative, property funds","Derivative, equity, property funds","Equity, property, derivative funds","Property, equity, derivative funds"],"d","Property → equity → derivatives.","哪一组按风险从低到高排列?",["股票、衍生、房地产基金","衍生、股票、房地产基金","股票、房地产、衍生基金","房地产、股票、衍生基金"],"房地产 → 股票 → 衍生工具。"],
+["R","A contract of agency is NOT allowed to be terminated",["On expiry of the contract period","By the principal’s notice of revocation","By the agent giving notice of temporary absence","By a law that makes the contract illegal"],"c","Temporary absence doesn’t end agency.","代理契约不能以下列方式终止",["契约期满","主方发出撤销通知","代理员通知暂时缺席","法律使契约非法"],"暂时缺席不会终止代理。"],
+["M","The following are medical and health insurance products, EXCEPT:",["Disability income insurance","Hospital and surgical insurance","Permanent disability income insurance","Critical illness insurance"],"c","Past-year key: (c).","以下是医疗及健康保险产品,除了:",["伤残收入保险","住院及手术保险","永久伤残收入保险","重大疾病保险"],"历年答案:(c)。"],
+["M","BNM issued the Medical and Health Insurance and Product Transparency guidelines to: I. Increase competition among private providers II. Reduce mis-selling III. Enhance access to healthcare via private insurance IV. Contain costs for long-term sustainability",["I and III","III and IV","I, II and III","II, III and IV"],"d","Not about provider competition.","国家银行发布医疗健康保险及产品透明度指南的目的:I. 增加私营医疗机构竞争 II. 减少不当销售 III. 通过私人保险提高医疗可及性 IV. 控制成本,确保长期可持续",0,"与医疗机构竞争无关。"],
+["I","An investment-linked policy has a free-look period of ____ days.",["11","15","18","21"],"b","15 days — same as other life policies.","投资联结保单的冷静期为____天。",0,"15 天,与其他寿险相同。"],
+["L","A life policy with an acquired ____ value gets non-forfeiture and paid-up privileges.",["Cash","Cashless","Cash investment","Cash savings"],"a","Cash value unlocks these options.","已累积____价值的寿险保单享有不没收及缴清保单权利。",["现金","无现金","现金投资","现金储蓄"],"有现金价值才有这些选择。"],
+["M","Which benefit does a Critical Illness policy provide?",["Daily, weekly or monthly allowance","Income to replace lost wages","Reimbursement of medical bills","Lump sum on diagnosis of any of the 36 dread diseases"],"d","CI = lump sum on diagnosis.","重大疾病保险提供哪项利益?",["每日、每周或每月津贴","替代工资损失的收入","报销医药费","确诊36种严重疾病之一时一次性赔付"],"重疾 = 确诊一次性赔付。"],
+["M","Women have a higher rate of ____ than men in medical and health insurance.",["Mobility","Morality","Mortality","Morbidity"],"d","Morbidity = rate of illness. Women: higher morbidity, lower mortality.","在医疗健康保险中,女性的____比男性高。",["活动能力","道德","死亡率","发病率"],"发病率 = 患病率。女性发病率较高,死亡率较低。"],
+["M","An insured given special terms, higher premium or coverage limits in medical insurance is a ____.",["Standard risk","Sub-standard risk","Declined risk","Special risk"],"b","Sub-standard.","在医疗保险中被施加特殊条款、较高保费或保障限制的受保人属于____。",["标准风险","次标准风险","拒保风险","特殊风险"],"次标准风险。"],
+["L","For a life proposal, ____ is a fact that may lead to higher premium loading or limited cover.",["Active involvement in politics","Diagnosis of a terminal illness","Suspension of driving licence","Participation in professional sports"],"b","Past-year key: (b).","在寿险要保书中,____是可能导致加费或限制保障的事实。",["积极参与政治","确诊末期疾病","驾照被吊销","参加职业体育运动"],"历年答案:(b)。"],
+["I","Which is NOT true about investment-linked policies?",["Flexibility","Transparency","Less diversification","Managed by professional fund managers"],"c","ILPs give MORE diversification.","关于投资联结保单,哪项不正确?",["灵活","透明","较少多元化","由专业基金经理管理"],"ILP 提供更多元化。"],
+["I","Clients must understand and accept the ____ trade-off before investing.",["Buy-sell","Low-high","Risk-return","Offer-acceptance"],"c","Risk–return trade-off.","客户投资前必须理解并接受____权衡。",["买卖","低高","风险回报","要约接受"],"风险回报权衡。"],
+["C","Mr Jason earns salary RM8,000 + rental RM2,000. He spends housing loan RM2,000, groceries RM1,500, car loan RM700, saving RM500, misc RM300. What is his surplus?",["RM500","RM1,000","RM5,000","RM2,000"],"c","Income RM10,000 − expenses RM5,000 = RM5,000.","Jason 先生收入:薪水 RM8,000 + 租金 RM2,000。支出:房贷 RM2,000、杂货水电 RM1,500、车贷 RM700、储蓄 RM500、杂项 RM300。他的盈余是多少?",0,"收入 RM10,000 − 支出 RM5,000 = RM5,000。"],
+["C","Bryan, 56, buys an ILP with basic regular premium RM5,000. His minimum cover is",["RM50,000","RM75,000","RM90,000","RM105,000"],"b","SAM factor at 56+ is 15. RM5,000 × 15 = RM75,000.","Bryan,56岁,购买投资联结保单,基本定期保费 RM5,000,最低保额是",0,"56 岁以上 SAM 倍数 = 15。RM5,000 × 15 = RM75,000。"],
+["R","Conventional insurance does not conform to Syariah because of the following, EXCEPT",["Gharar","Riba","Maisir","Mudharabah"],"d","Gharar (uncertainty), riba (interest), maisir (gambling) are the problems. Mudharabah is a Syariah profit-sharing contract.","传统保险不符合伊斯兰教法的因素,除了",["Gharar(不确定)","Riba(利息)","Maisir(赌博)","Mudharabah(利润分享)"],"问题在于不确定、利息、赌博。Mudharabah 是符合教法的利润分享契约。"],
+["P","Society and government are responsible for ____ risk.",["Speculative","Fundamental","Particular","Pure"],"b","Fundamental risk affects society at large.","社会和政府对____风险负责。",["投机","基本","特定","纯"],"基本风险影响整个社会。"],
+["P","Transfer of the insured’s rights and liabilities to a new insured is",["A transfer of interest","A transfer of policy","An assignment of policy","An assignment of policy money"],"c","Assignment.","将受保人的权利和责任转给新受保人称为",["利益转移","保单转移","保单转让","保单款项转让"],"转让。"],
+["P","Insurable interest ensures insurance is not misused for ____.",["Investing","Gaming","Gambling","Profiteering"],"d","Past-year key: profiteering.","保险利益确保保险不被用于____。",["投资","博弈","赌博","牟取暴利"],"历年答案:牟取暴利。"],
+["L","Eligibility to automatically add new employees to group life from recruitment date:",["Selected by internal recruitment","Permanent employees aged 16 to 60","Permanent and temporary workers with permits","Healthy employees of any age"],"b","Permanent, 16–60.","新雇员自入职日起自动加入团体寿险的资格:",["经内部招聘挑选","16至60岁的长期雇员","持准证的长期及临时工","任何年龄的健康雇员"],"长期雇员,16–60 岁。"],
+["L","Which is correct about Terminal Bonus?",["Paid on disability","Creates a right beyond next valuation","Paid on top of surrender value on request","Not payable if premiums were discontinued"],"d","Policy must be kept in force to the end.","关于终期红利,哪项正确?",["伤残时支付","在下次估值后产生权利","退保时额外支付","若停止缴费则不支付"],"保单必须维持到最后。"],
+["L","After the insurer receives the first premium with a completed proposal, the insured’s immediate benefit is",["Fully covered if he dies accidentally","Covered for suicide","Covered for critical illness","Covered for natural death"],"a","Temporary accidental death cover.","保险公司收到首期保费及完整要保书后,受保人的即时利益是",["意外身故获全额保障","自杀获保障","重大疾病获保障","自然死亡获保障"],"临时意外身故保障。"],
+["I","Regarding top-up premium, which is correct?",["Main goal is to raise sum assured","Minimum top-up is RM5,000","Top-up has a 5% upfront fee; balance buys chosen funds","No fees at all"],"c","5% upfront, rest buys units.","关于加额保费,哪项正确?",["主要目的是增加保额","最低加额 RM5,000","加额收5%预付费,余额购买所选基金","完全不收费"],"5% 预付费,其余买单位。"],
+["I","During a premium holiday,",["Insurer pays as goodwill","Cost of insurance is still deducted from account value if sufficient","BNM fund pays","Other policyholders pay"],"b","Charges still come out of account value.","保费假期期间,",["保险公司出于善意代缴","若户口价值足够,保险费用仍从中扣除","国行基金支付","其他保单持有人支付"],"费用仍从户口价值扣除。"],
+["I","____ are a category of corporate bonds.",["Stocks","Ordinary shares","Debenture stocks","Preference shares"],"c","Debentures = corporate bonds.","____是公司债券的一种。",["股票","普通股","信用债券(Debenture)","优先股"],"信用债券 = 公司债券。"],
+["R","When selling ILPs, agents must ensure ____ under BNM’s ILP guidelines.",["Continuous efforts","Professional and proper conduct","Hard work and aggressive selling","Effective planning"],"b","Professional and proper conduct.","根据国行投资联结指南,代理员销售 ILP 时必须确保____。",["持续努力","专业及正确的行为","努力及积极销售","有效规划"],"专业及正确的行为。"],
+["R","Agents are prohibited from 'twisting'. What is twisting?",["Upselling with clear disclosure","Misrepresentation inducing a client to discontinue a policy to buy a new one, without explaining differences and consequences","Upselling without disclosure","Inducing to keep old policy and buy new one"],"b","Twisting = misleading a client into replacing a policy.","代理员不得“扭曲”(twisting)。什么是扭曲?",["清楚说明下的追加销售","以失实陈述诱使客户终止旧保单购买新保单,而未说明差异和后果","未说明的追加销售","诱使保留旧单并买新单"],"扭曲 = 误导客户更换保单。"],
+["I","ILPs fully invested in equity funds suit policy owners who",["Want regular income","Have a long-term objective","Can tolerate short-term fluctuations","Cannot tolerate fluctuations"],"c","Equity = volatile.","完全投资于股票基金的 ILP 只适合以下保单持有人",["寻求固定收入","有长期目标","能承受短期波动","不能承受波动"],"股票 = 波动大。"],
+["L","An annuity is ____ fund bought for the right to a series of periodic payments from a life insurer.",["A savings","A retirement","A trust","An investment"],"b","Annuity = retirement fund.","年金是向寿险公司购买、以获得定期付款权利的____基金。",["储蓄","退休","信托","投资"],"年金 = 退休基金。"],
+["I","Which is true of a unit trust investment?",["Trustee manages the portfolio","Established by a trust deed with many fund types","The deed lets a fund manager hold assets in trust for investors","Two-way arrangement via the agent"],"c","Past-year key: (c).","关于单位信托投资,哪项正确?",["受托人管理投资组合","由信托契约设立,有多种基金","契约让基金经理代投资者托管资金和资产","通过代理员的双方安排"],"历年答案:(c)。"],
+["P","A man has a heart attack while driving, crashes and dies. To decide if death is accidental under his PA policy, insurers apply",["Subrogation","Indemnity","Insurable interest","Doctrine of proximate cause"],"d","Find the dominant cause.","某人驾车时心脏病发撞车身亡。为判断是否属意外身故,保险公司会运用",["代位求偿","赔偿原则","保险利益","近因原则"],"找出主导原因。"],
+["R","If dissatisfied with the insurer’s final decision, or no response after 60 days, the policyholder can refer",["Complaint to BNM","Case to court","Complaint to the Ombudsman for Financial Services (OFS)","LIAM or PIAM"],"c","OFS — free dispute resolution.","若对保险公司最终决定不满,或60天后未获回复,投保人可转介",["向国行投诉","上法庭","向金融服务监察员(OFS)投诉","LIAM 或 PIAM"],"OFS:免费争议调解。"],
+["P","An example of moral hazard is",["Unguarded premises","Storing hazardous chemicals","Dangerous sports","Dishonest employees"],"d","Moral = dishonesty. A–C are physical hazards.","道德风险的例子是",["无人看守的场所","储存危险化学品","从事危险运动","不诚实的员工"],"道德 = 不诚实。A–C 是实质危险。"],
+["P","Insurance is mainly about pure risk. Which is NOT a pure risk but is insurable?",["Typhoon and hurricane","War and military action","Nuclear testing","Effects of inflation"],"a","2024 key: typhoon and hurricane.","保险主要关注纯风险。以下哪项不是纯风险但可保?",["台风和飓风","战争和军事行动","核试验","通货膨胀的影响"],"2024 答案:台风和飓风。","Past Year #2 keys a similar question as inflation. Sources conflict — confirm with your trainer.","历年 #2 类似题答案是通货膨胀。资料冲突,请向培训师确认。"],
+["P","The following differentiates insurance from gambling:",["Homogeneous risks in large numbers","Inevitable losses","Insurable interest in the subject matter","Measurable financial value"],"a","Past-year key: (a).","以下哪项区分保险与赌博:",["大量同质风险","不可避免的损失","对保险标的有保险利益","可衡量的财务价值"],"历年答案:(a)。","Textbook also says insurable interest separates insurance from gambling. Confirm with your trainer.","课本也说保险利益区分保险与赌博。请向培训师确认。"],
+["P","The government and society are solely responsible for this type of risk:",["Pure","Fundamental","Particular","Speculative"],"b","Fundamental risk.","这类风险完全由政府和社会负责:",["纯风险","基本风险","特定风险","投机风险"],"基本风险。"],
+["P","'The active efficient cause that sets in motion a chain of events… without a new independent force.' This defines",["Independent cause","Proximate cause","Single cause","Remote cause"],"b","Proximate cause.","“启动一连串事件并导致结果的主动有效原因,其间没有新的独立力量介入。”这是",["独立原因","近因","单一原因","远因"],"近因。"],
+["M","____ is an excluded peril in a personal accident policy.",["Drowning","Food poisoning","Snake bite","Illness"],"d","PA covers accidents, not illness.","____是个人意外保单的除外风险。",["溺水","食物中毒","蛇咬","疾病"],"意外险保意外,不保疾病。"],
+["P","In ordinary commercial contracts there is no need to disclose unrequested information because the principle is",["Caveat emptor","Indemnity","Contribution","Proximate cause"],"a","Buyer beware.","普通商业契约无需透露未被询问的资料,因为原则是",["买者自负","赔偿","分摊","近因"],"买者自负。"],
+["P","A climber broke his leg, was hospitalised, then died of SARS caught from another patient. The PA death claim is declined due to",["Contribution","Proximate cause","Insurable interest","Indemnity"],"b","New independent cause (SARS) broke the chain.","登山者摔断腿入院,却因被其他病人传染 SARS 死亡。意外险死亡索赔被拒,是因为",["分摊","近因","保险利益","赔偿"],"新的独立原因(SARS)打断了链条。"],
+["P","____ is valid but cannot be enforced in court if one party refuses.",["Contract ab initio","Void contract","Unenforceable contract","Voidable contract"],"c","Unenforceable.","____有效,但若一方拒绝履行,无法在法庭执行。",["自始契约","无效契约","不可执行契约","可撤销契约"],"不可执行契约。"],
+["P","Why are policy terms and conditions important?",["Buy back excluded perils","Exclude war and terrorism","Parties understand their duties, rights and obligations","Insured understands cover limits"],"c","Duties, rights, obligations.","保单条款为何重要?",["买回除外风险","排除战争恐怖主义","让双方了解各自的责任、权利与义务","让受保人了解保障限制"],"责任、权利、义务。"],
+["R","With no instructions on a point, the agent may follow ____ where the practice is clear.",["Market agreement","Legal usage","Market usage","Customary practice"],"d","2024 key: customary practice.","若没有指示,代理员可在做法明确时遵循____。",["市场协议","法律惯例","市场惯例","习惯做法"],"2024 答案:习惯做法。","Past Year #2 keys the same question as 'market usage'. Recognise both.","历年 #2 同题答案是“市场惯例”。两个都要认得。"],
+["M","Apart from medical and family history, an important underwriting factor for medical and health insurance is",["Marital status","Age","Hobbies","Education level"],"b","Age.","除病史和家族病史外,医疗健康保险的重要核保因素是",["婚姻状况","年龄","嗜好","教育程度"],"年龄。"],
+["L","Sarah realised the life policy she received is not what she expected. What can she do?",["Call and complain","Report to BNM","Make a police report","Return the policy to the insurer within 15 days"],"d","Free-look: 15 days.","Sarah 发现收到的寿险保单不符合预期。她可以怎么做?",["打电话投诉","向国行报告","报警","在15天内退回保单"],"冷静期:15 天。","The PDF answer key shows B, which contradicts the 15-day free-look rule. This portal uses D.","PDF 答案写 B,与 15 天冷静期规则矛盾。本题库采用 D。"],
+["L","A policy owner may return a life policy within ____ days of delivery if unhappy with its terms.",["7","15","21","30"],"b","15 days.","保单持有人若不满条款,可在寿险保单交付后____天内退回。",0,"15 天。"],
+["L","A life policy acquires a cash surrender value after premiums are paid continuously for ____ years.",["Three","Two","Five","Four"],"a","Past-year answer: 3 years.","寿险保单在连续缴费____年后取得现金退保价值。",["三","二","五","四"],"历年答案:3 年。"],
+["R","Members of the Financial Mediation Bureau do NOT include",["Licensed insurers","Licensed takaful operators","Licensed insurance brokers","Licensed banks"],"c","Brokers aren’t members.","金融调解局的成员不包括",["持牌保险公司","持牌回教保险经营者","持牌保险经纪","持牌银行"],"经纪不是成员。"],
+["R","Insurers in Malaysia must be incorporated as ____ companies.",["Private","Mutual","Public","Limited"],"c","Insurers = public companies.","马来西亚保险公司必须注册为____公司。",["私人","相互","公众","有限"],"保险公司 = 公众公司。"],
+["R","When in doubt about the code of conduct, employees can seek guidance from: I. Management II. An experienced agent III. Heads of department IV. BNM",["I and II","II and III","I, II and IV","I, III and IV"],"d","Not from another agent.","对行为准则有疑问时,员工可向以下寻求指导:I. 公司管理层 II. 资深代理员 III. 部门主管 IV. 国家银行",0,"不是问其他代理员。"],
+["M","If a claim was made last year, the insurer’s options on renewal: I. Refuse renewal II. Modify terms III. Exclude the condition that caused the claim IV. Cut sum insured to minimum",["I and II","II and III","I, II and III","II, III and IV"],"c","Cutting to minimum isn’t an option.","若保单持有人上一年有索赔,续保时保险公司可:I. 拒绝续保 II. 修改条款 III. 排除引起索赔的病症 IV. 将保额减至最低",0,"不能减到最低保额。"],
+["L","A policy where the surrender value is used as a single premium to continue cover on original terms but with reduced sum assured is",["A fee policy","A paid-up policy","A term policy","An extended policy"],"b","Reduced paid-up.","以退保价值作为单期保费,按原条款继续保障但保额减少的保单称为",["收费保单","缴清保单","定期保单","展期保单"],"缴清保单。"],
+["L","On electing a paid-up policy, full sum insured stays in force until",["Next premium on the new policy","Next premium due on the original policy","Policy owner retires","Policy owner surrenders"],"b","Until next premium due date of the original policy.","选择转为缴清保单后,全额保额维持到",["新保单下次保费到期日","原保单下次保费到期日","保单持有人退休","保单持有人退保"],"维持到原保单下次保费到期日。","The PDF answer key shows D. Past Year #2 and the FSA wording support B.","PDF 答案写 D。历年 #2 和金融服务法令支持 B。"],
+["L","If a policy owner objects to a life policy 20 days after delivery,",["Apply to court for refund","The insurer is not liable to refund the premium","Blacklisted","Insurer must refund all"],"b","Past 15 days — no free-look refund.","若保单持有人在交付后20天才想取消寿险保单,",["须向法庭申请退款","保险公司无须退还保费","会被列入黑名单","必须全额退还"],"超过 15 天,没有冷静期退款。"],
+["L","An insurer must prove ____ to contest the validity of a life contract.",["Disclosure of false information","Erroneous statement","Inaccurate underwriting info","Concealment of material facts"],"d","Concealment of material facts.","保险公司必须证明____才能质疑寿险契约的有效性。",["透露虚假资料","错误陈述","核保资料不准确","隐瞒重要事实"],"隐瞒重要事实。"],
+["L","Which is NOT distributed from divisible surplus?",["Cash bonus","Non-par maturity claim","Interim bonus","Guaranteed bonus"],"b","Non-par = no surplus share.","以下哪项不是从可分盈余中分配的?",["现金红利","非分红满期索赔","临时红利","保证红利"],"非分红 = 不分盈余。"],
+["L","A limited payment whole life policy pays premiums for limited years or until the ____ of a specified age.",["Fulfilment","Attainment","Completion","Achievement"],"b","Until attainment of an age.","限期缴费终身寿险的保费只缴有限年数或直至____指定年龄。",["履行","达到","完成","成就"],"达到某年龄。"],
+["L","The ____ is declared as a % of sum assured and paid on death or maturity.",["Compound reversionary bonus","Simple reversionary bonus","Terminal bonus","Cash bonus"],"b","Simple = % of sum assured only.","____按保额百分比宣布,并在身故或满期时支付。",["复利复归红利","简单复归红利","终期红利","现金红利"],"简单复归红利 = 只按保额计算。"],
+["L","Participating policies cost more than non-par because they offer",["Share in assets and liabilities","Participation in the company’s profits","Yearly cash payments","Guaranteed renewal"],"b","Share in profits.","分红保单比非分红保单贵,因为它们提供",["分享资产负债","分享公司利润","每年现金付款","保证续保"],"分享利润。"],
+["L","The level premium that stays constant is based on the concept that",["Pure risk premium varies with age while mortality increases with age","Varies while mortality decreases","Both constant","Pure risk premium constant while mortality rises"],"a","Past-year key: (a).","均衡保费保持不变,是基于以下概念:",["纯风险保费随年龄变化,死亡率随年龄上升","随年龄变化,死亡率下降","两者不变","纯风险保费不变,死亡率上升"],"历年答案:(a)。"],
+["L","Insurers allow backdating of a life policy’s start date by up to 6 months so that",["Insurer benefits from lower premium","Insured pays back-dated premiums","Insurer charges more","The insured benefits from lower premiums"],"d","Younger age = lower premium.","保险公司允许寿险生效日期回溯最多6个月,让",["保险公司享较低保费","受保人补缴保费","保险公司收更高保费","受保人享有较低保费"],"年龄较小 = 保费较低。"],
+["L","The agent’s role in underwriting:",["Solicits good business the insurer can profit from","Sets terms and premiums","Analyses inherent risk","Works behind the scenes"],"a","Agent = first-line underwriter, brings good business.","代理员在核保过程中的角色:",["争取保险公司可获利的良好业务","决定条款及保费","分析固有风险","在幕后工作"],"代理员 = 第一线核保人,带来优质业务。"],
+["L","Where there is no nomination, policy moneys are paid to",["Lawful beneficiaries","The lawful executor or administrator of the estate","Spouse, children and parents","Lawful nominees"],"b","No nominee → executor/administrator.","没有提名时,保单款项付给",["合法受益人","遗产的合法遗嘱执行人或管理人","配偶、子女及父母","合法提名人"],"没有提名 → 遗嘱执行人/管理人。"],
+["R","An agent who solicits or negotiates a contract for its formation is",["An agent of the insurance company","An independent agent","An agent of the prospect","A registered agent"],"a","Agent acts for the insurer.","为订立保险契约而招揽或洽谈的代理员是",["保险公司的代理","独立代理","潜在客户的代理","注册代理"],"代理员代表保险公司。"],
+["R","Under the Code of Practice, a life agent shall NOT",["Conceal any material fact","Tell the insurer’s name","Give a name card","Explain the premium"],"a","Never conceal material facts.","根据业务守则,寿险代理员不得",["隐瞒任何重要事实","告知保险公司名称","给名片","解释保费"],"永远不能隐瞒重要事实。"],
+["R","Which is NOT in line with ensuring a prospect understands the cover?",["Point out the long-term nature","Point out restrictions and exclusions","Explain essential provisions","Add extensions with extra premium without consent"],"d","Never add extras without consent.","以下哪项不符合确保客户了解保障范围?",["指出保险是长期契约","指出限制及除外条款","解释主要条款","未经同意加入需额外保费的扩展保障"],"未经同意不可加附加保障。"],
+["R","To conserve business already secured, the agent should: I. Keep in contact with all policyholders II. Share policyholder info to get new business III. Help claimants file claim forms IV. Comply with claim settlement requirements",["I and II","III and IV","I, II and IV","I, III and IV"],"d","Sharing client info breaches confidentiality.","为保住已取得的业务,代理员应:I. 与所有保单持有人保持联系 II. 分享保单持有人资料以取得新业务 III. 协助索赔人填写索赔表 IV. 遵守理赔规定",0,"分享客户资料违反保密。","The PDF answer key shows C, which includes item II (sharing client info). That breaches confidentiality, so this portal uses D.","PDF 答案写 C,包括第 II 项(分享客户资料),违反保密,本题库采用 D。"],
+["R","To explain cover, exclusions and charges fairly, the agent should",["Provide product illustrations","Do own market survey","Get specialist advice from underwriters if needed","Provide brochures"],"a","Past-year key: (a).","为公平解释保障、除外条款及收费,代理员应",["提供产品说明书","自己做市场调查","有需要时向核保人寻求专家意见","提供销售手册"],"历年答案:(a)。"],
+["I","How is investment-linked insurance different from traditional insurance?",["Guarantees capital","Guarantees fixed annual return","Directly connected to investment performance","Guarantees maturity amount"],"c","Linked to fund performance.","投资联结保险与传统保险有何不同?",["保证本金","保证每年固定回报","与投资表现直接挂钩","保证满期金额"],"与基金表现挂钩。"],
+["I","Which is correct about the Sum Assured Multiple (SAM) rule?",["Rider premium included","Top-up included","Aged 56 and above: 15× basic annual regular premium","Aged 1–16: 15×"],"c","56+ → 15×.","关于保额倍数规则(SAM),哪项正确?",["附加险保费须计入","加额保费须计入","56岁及以上:基本年度定期保费的15倍","1–16岁:15倍"],"56 岁以上 → 15 倍。"],
+["I","The minimum basic single premium is ____, at the insurer’s discretion.",["RM50,000","RM5,000 – RM20,000","RM25,000","RM1,200 – RM5,000"],"b","RM5,000 – RM20,000.","最低基本单期保费为____,由保险公司决定。",0,"RM5,000 – RM20,000。"],
+["I","Which are correct? I. Ad hoc top-up is paid on a due date II. A premium-paying rider needs extra premium III. Switching moves money to another company IV. Partial withdrawal is allowed from RP-ILP",["I and II","I and III","II and IV","III and IV"],"c","Ad hoc = any time; switching is between funds, not companies.","以下哪些正确?I. 临时加额在到期日缴付 II. 缴费型附加险须额外保费 III. 转换可把投资转到另一家公司 IV. 定期保费 ILP 可部分提款",0,"临时加额随时可缴;转换是基金之间,不是公司之间。"],
+["I","Identify the correct statement.",["SP-ILP objective is investment; RP-ILP is protection","Both mainly investment","SP-ILP protection; RP-ILP investment","Both need cost of insurance to cover the basic sum assured"],"d","Past-year key: (d).","选择正确的说法。",["单期 ILP 目标是投资;定期 ILP 是保障","两者都主要为投资","单期为保障;定期为投资","两者都需要保险费用来支付基本保额"],"历年答案:(d)。"],
+["I","To control spending and find money to save for holidays, retirement and education, one should",["Draw up a personal budget","Cut expenses","Work hard","Save 10%"],"a","Budget first.","要控制开支并找到钱储蓄度假、退休和子女教育,应该",["制定个人预算","尽量减少开支","努力工作","储蓄收入的10%"],"先做预算。"],
+["I","____ will ultimately affect the investment decision.",["Level of funds available","Characteristics of the investment","Market conditions","Number of family members"],"c","Past-year key: market conditions.","____最终会影响投资决定。",["可用资金","投资特点","市场情况","家庭成员人数"],"历年答案:市场情况。"],
+["I","True statement about shares:",["Only capital appreciation; liquid","Dividends and growth; illiquid","May give good dividends and capital appreciation; liquid as traded in open market","No good dividends; liquid"],"c","Dividends + growth + liquidity.","关于投资股票,哪项正确?",["只有资本增值;流动性高","有股息和增值;流动性差","可能有良好股息和资本增值;可在公开市场交易,流动性高","没有良好股息;流动性高"],"股息 + 增值 + 流动。"],
+["R","Agents promoting ILPs should also comply with the guidelines of",["LIAM","CUTA","IBAM","FIMM"],"a","LIAM — Life Insurance Association of Malaysia.","推广投资联结产品的代理员还须遵守哪个机构的准则?",["马来西亚人寿保险公会(LIAM)","CUTA","马来西亚保险经纪协会(IBAM)","马来西亚投资经理联合会(FIMM)"],"LIAM — 马来西亚寿险公会。"],
+["I","Correct statement on factors influencing share prices:",["Not affected by economy or currency","Markets never inter-related","Adverse events and other major markets can sometimes affect the local market","Prices follow directors’ view"],"c","Global markets are linked.","关于影响股价的因素,哪项正确?",["不受经济与汇率影响","各国股市互不相关","其他地区的不利事件和主要股市表现有时会影响本地股市","股价按董事看法波动"],"全球市场互相影响。"],
+["R","Which statement is correct?",["Agents should be professional advisers on the right plan and funds for each client’s risk profile, needs and goals","Insurer isn’t responsible for agent knowledge","Insurer pays any claim","Agents upgrade themselves only"],"a","Professional adviser.","以下哪项正确?",["代理员应以专业方法,按客户风险、需要和目标推荐合适计划和基金","确保代理员专业不是保险公司的责任","任何情况都须赔付","代理员只能自己提升"],"专业顾问。"],
+["L","A ____, if known by the insurer, might lead to refusal to issue a life policy.",["Material fact","Special fact","Common fact","Anonymous fact"],"a","Material fact.","保险公司若知道____,可能会拒绝签发寿险保单。",["重要事实","特殊事实","共同事实","匿名事实"],"重要事实。"],
+["R","A consequence of replacing a policy of the same type:",["Lower premium","Better benefits","Improved and cheaper","Higher premium rate because the insured is older"],"d","Replacement = older age = higher premium.","更换同类型保单的后果:",["保费较低","利益更好","更好更便宜","受保人年龄增加,保费率更高"],"更换 = 年龄更大 = 保费更高。"],
+["I","True statement about fixed deposits:",["Guaranteed by government","Shorter period, higher return","Longer period, higher return","Need government approval"],"c","Longer tenure = higher rate.","关于定期存款,哪项正确?",["由政府保证","期限越短回报越高","期限越长回报越高","须政府批准"],"期限越长,利率越高。"],
+["I","A single person in his twenties invests only in bonds, or a 70-year-old owns very aggressive funds. This shows",["The single person is risk averse","The 70-year-old isn’t risk averse","Risk profiling may not have been done","Older people are more aggressive"],"c","Mismatch = no risk profiling.","二十多岁单身人士只投资债券,或70岁老人持有非常激进的基金,这表明",["单身人士厌恶风险","70岁的人不厌恶风险","可能没有进行风险评估","老年人更激进"],"不匹配 = 没做风险评估。"],
+["I","If a policy owner tops up a single premium ILP,",["Each top-up raises cover by 125%","Each top-up buys units","Top-up counted as bonus units","Charge is 5%; balance buys units in chosen funds"],"d","5% charge, rest buys units.","若保单持有人为单期 ILP 加额,",["每次加额保额增加125%","每次加额用于买单位","加额算作奖励单位","收费5%,余额购买所选基金单位"],"收 5%,其余买单位。"],
+["I","Select the correct statement.",["Traditional gives better return","Traditional more transparent and flexible","ILPs offer more flexibility and transparency","ILPs guarantee returns"],"c","ILP = flexible, transparent.","选择正确的说法。",["传统保险回报较好","传统保险更透明灵活","投资联结产品更灵活透明","ILP 保证回报"],"ILP = 灵活、透明。"],
+["R","A BNM ILP guideline relevant to agents: they must ensure ____ when selling ILPs.",["Continuous efforts","Professional and proper conduct","Aggressive hard work","Effective planning"],"b","Professional and proper conduct.","国行投资联结指南要求代理员销售 ILP 时必须确保____。",["持续努力","专业及正确的行为","积极努力","有效规划"],"专业及正确的行为。"],
+["R","To make sure the proposer understands the consequences of non-disclosure, the agent should",["Have two witnesses","Video-record","Personally point out all the consequences to the proposer","Have documents signed"],"c","Explain personally.","为确保投保人了解不透露和不准确的后果,代理员应",["确保两名证人在场","录像","亲自向投保人指出所有后果","确保文件齐全并签名"],"亲自解释。"],
+["I","In the USA, an investment-linked policy is called",["Variable life insurance","Universal life insurance","International life insurance","Multinational life insurance"],"a","US: variable life.","在美国,投资联结保单被称为",["变额寿险","万能寿险","国际寿险","跨国寿险"],"美国:变额寿险。"],
+["I","An ILP offers ____, which is NOT available in a traditional life policy.",["Policy loan","Premium holiday","Guaranteed cash value","Availability for age 16+"],"b","Premium holiday.","投资联结保单提供____,传统寿险没有。",["保单贷款","保费假期","保证现金价值","16岁以上可投保"],"保费假期。"],
+["I","Which is FALSE about treasury bills?",["Issued by BNM","Long-term government funding vehicles","Institutional investors are main buyers","Safer investment"],"b","T-bills are short-term.","关于国库券,哪项错误?",["由国家银行发行","是长期政府融资工具","主要买家是机构投资者","较安全的投资"],"国库券是短期的。"],
+["I","The priority of single premium ILP holders is",["Investment first, protection second","Protection first, investment second","Return first","Capital guarantee first"],"a","SP-ILP = investment first.","单期保费 ILP 持有人的优先顺序是",["投资第一,保障第二","保障第一,投资第二","回报第一","保本第一"],"单期 ILP = 投资优先。"],
+["I","Investors seeking capital gains are LEAST likely to invest in",["Bonds","Derivatives","Fixed deposits","Fixed, ongoing source of investment"],"c","FD = interest only, no capital gain.","寻求资本增值的投资者最不可能投资",["债券","衍生工具","定期存款","固定持续的投资来源"],"定存只有利息,没有资本增值。"],
+["I","Which is correct about REITs?",["Fixed charge on company property","Invests in and manages properties and distributes rental income as dividends","Holder is part-owner of company","Convertible loan"],"b","Rent paid out as dividends.","关于房地产投资信托(REIT),哪项正确?",["对公司财产的固定抵押","投资及管理房产,并把租金收入作为股息分派","持有人是公司部分拥有人","可转换贷款"],"租金作为股息分派。"],
+["I","Which is correct about corporate bonds?",["Loan stocks are secured","Debenture stocks are classified as corporate bonds","Issued by BNM","Lower return than government bonds"],"b","Debentures = corporate bonds.","关于公司债券,哪项正确?",["贷款股是有担保贷款","信用债券属公司债券","由国家银行发行","回报低于政府债券"],"信用债券 = 公司债券。"],
+["C","Raymond wants his SP-ILP account value to be exactly RM100,000 after the 5% upfront charge. His premium is",["RM90,250","RM100,000","RM95,000","RM105,263"],"d","Premium × 95% = RM100,000 → RM100,000 ÷ 0.95 = RM105,263.","Raymond 希望扣除5%预付费后,单期 ILP 户口价值正好是 RM100,000。他的保费是",0,"保费 × 95% = RM100,000 → RM100,000 ÷ 0.95 = RM105,263。","The PDF answer key shows C (RM95,000), but the maths gives D.","PDF 答案写 C(RM95,000),但计算结果是 D。"],
+["I","For a regular premium ILP, the maturity benefit is paid from",["Sum assured only","Account value only","Sum assured and account value","Whichever is higher"],"b","Maturity = account value.","定期保费 ILP 的满期利益来自",["只有保额","只有户口价值","保额加户口价值","两者较高者"],"满期 = 户口价值。"],
+["I","Which is correct about diversification?",["Investing across countries in high-return segments","Investing across different asset categories and market segments","Technical analysis","Yearly rebalancing"],"b","Spread across assets and segments.","关于投资多元化,哪项正确?",["在不同国家投资高回报领域","投资于不同资产类别和不同市场领域","技术分析","每年重新平衡"],"分散于不同资产与市场。","The PDF answer key shows D. The textbook definition (also Past Year #3 Q50) is B.","PDF 答案写 D。课本定义(历年 #3 第50题)是 B。"],
+["R","BNM ILP guidelines on fund information require insurers to",["Give one consolidated fund fact sheet","Report on all company funds yearly","Report monthly","Provide a separate fund fact sheet for each ILP fund"],"d","One fact sheet per fund.","国行投资联结指南对基金资料的规定:",["为所有基金提供一份综合概况表","每年报告公司所有基金","每月报告","为每个投资联结基金提供单独的基金概况表"],"每个基金一份概况表。","The PDF answer key shows B, but B says 'all funds the company has'. The guideline is a yearly report on the funds the policy owner holds, plus a separate fact sheet per fund (D).","PDF 答案写 B,但 B 说“公司所有基金”。指南是:每年报告保单持有人所持基金,每个基金有单独概况表 (D)。"],
+["I","The key activity of a property fund is",["Investing all into real estate","Obtaining stocks in development companies","Trading property","Trading developers"],"b","Past-year key: (b).","房地产基金的主要活动是",["全部投资房地产","购入发展商股票","买卖房产","买卖发展商"],"历年答案:(b)。"],
+["R","How to satisfy the customer’s requirements? I. Impress with agent’s income II. Do a financial needs analysis III. Understand the sales illustration IV. Understand company information",["I & II","I, II & III","II, III & IV","All"],"c","Never sell with your income.","如何满足客户需要?I. 用代理员收入打动客户 II. 进行财务需求分析 III. 了解公司销售说明书 IV. 了解公司资料",0,"绝不用收入打动客户。"],
+["R","Underlying principles of the code of ethics and conduct: I. Avoid misuse of position II. Avoid conflict of interest III. Prevent misuse of information IV. Prevent competition between agents",["I and II","I, II and III","II, III and IV","I, III and IV"],"b","Not about competition.","道德与行为准则的基本原则:I. 避免滥用职权 II. 避免利益冲突 III. 防止滥用资料 IV. 防止代理员之间竞争",0,"与竞争无关。"],
+["I","How is ILP different from traditional insurance?",["Guarantees capital","Fixed annual return","Directly connected to investment performance","Guaranteed maturity amount"],"c","Linked to performance.","投资联结保险与传统保险有何不同?",["保证本金","每年固定回报","与投资表现直接挂钩","保证满期金额"],"与表现挂钩。"],
+["R","The body that protects depositors and financial system stability in Malaysia:",["MOFS","PPRM","PIDM","PDRM"],"c","PIDM.","保护马来西亚存户及金融体系稳定的机构:",0,"PIDM(马来西亚存款保险机构)。"],
+["L","Under Part III of the LIAM Code on claims, insurers may",["Not reject claims","Never reject under any circumstances","Not unreasonably reject a claim","Reject at own discretion"],"c","Key word: unreasonably.","根据 LIAM 行为与道德准则第三部分(索赔),保险公司",["不拒绝索赔","任何情况都不拒赔","不得无理拒绝索赔","可自行决定拒赔"],"关键词:无理。"],
+["I","____ is an agreement to buy or sell a commodity at a set price on a set future date.",["Commodity assets","Commodity exchanges","Commodity futures","Commodity bonds"],"c","Futures.","____是以特定价格在未来特定日期买卖商品的协议。",["商品资产","商品交易所","商品期货","商品债券"],"期货。"],
+["I","The ____ guarantee clause keeps an RP-ILP from lapsing in the first few years even if account value can’t cover insurance charges.",["No-lapse","Surrender","No-claim","Maturity"],"a","No-lapse guarantee.","____保证条款规定,即使户口价值不足以支付保险费用,定期保费 ILP 在最初几年也不会失效。",["不失效","退保","无索赔","满期"],"不失效保证。"],
+["I","The agent’s commission is paid from",["Allocated premium","Unallocated premium","Maturity benefit","Surrender benefit"],"b","Unallocated premium.","代理员佣金从哪里支付?",["已分配保费","未分配保费","满期利益","退保利益"],"未分配保费。"],
+["L","Death or maturity benefit of a participating whole life plan is paid from",["Sum assured only","Sum assured and vested bonus","Account value","Cash value"],"b","SA + vested bonus.","终身分红计划的身故或满期利益来自",["只有保额","保额及既得红利","户口价值","现金价值"],"保额 + 既得红利。"],
+["I","Government bond is:",["Short-term, under 1 year","Short-term, under 5 years","Long-term, under 5 years","Long-term, 3 to 5 years"],"b","Past-year key: (b).","政府债券是:",["短期,一年内到期","短期,五年内到期","长期,五年内到期","长期,三至五年"],"历年答案:(b)。"]
+];
+const TIP=[
+["R","What is the minimum CPD training for a registered general insurance agent (effective 1 January 2005)?",["30 hours a year","20 hours a year","20 hours in two years","25 hours in two years"],"b","General insurance agents: 20 CPD hours a year.","注册普通保险代理员的最低 CPD 培训时数(2005年1月1日起)是多少?",["每年30小时","每年20小时","两年20小时","两年25小时"],"普通保险代理员:每年 20 小时 CPD。"],
+["R","How many CPD hours a year must an investment-linked (life) agent complete?",["20 hours","25 hours","30 hours","40 hours"],"c","Team tip: ILP/life agents need 30 CPD hours, completed within the year.","投资联结(寿险)代理员每年须完成多少小时 CPD?",["20小时","25小时","30小时","40小时"],"团队提示:ILP/寿险代理员须在一年内完成 30 小时 CPD。","Team tip from past candidates — check your current CPD requirement with Super Group.","这是考过的人给的提示,最新 CPD 要求请向 Super Group 确认。"],
+["I","The basic sum assured (BSA) of a single premium investment-linked policy is typically",["100% of single premium","105% of single premium","125% of single premium","150% of single premium"],"c","Usually 125% of the single premium paid.","单期保费投资联结保单的基本保额(BSA)通常是",["单期保费的100%","单期保费的105%","单期保费的125%","单期保费的150%"],"通常是已缴单期保费的 125%。","Team tip: older or higher-risk lives may get 105%.","团队提示:年长或高风险人士可能是 105%。"],
+["I","Arrange ILP funds from HIGHEST to LOWEST risk.",["Equity, managed, balanced, bond, cash","Cash, bond, balanced, managed, equity","Balanced, equity, managed, bond, cash","Equity, balanced, managed, cash, bond"],"a","Equity → managed → balanced → bond → cash.","按风险从高到低排列投资联结基金。",["股票、管理、平衡、债券、现金","现金、债券、平衡、管理、股票","平衡、股票、管理、债券、现金","股票、平衡、管理、现金、债券"],"股票 → 管理 → 平衡 → 债券 → 现金。"],
+["R","Which is NOT a detriment of twisting (replacing a policy)?",["Qualifying periods start again","Higher premium based on attained age","Initial costs paid twice","Suicide and incontestable clauses carry over unchanged"],"d","They restart — that’s a detriment, not a carry-over.","以下哪项不是扭曲(更换保单)的坏处?",["等候期须重新开始","按到达年龄收更高保费","再次承担初始费用","自杀条款和不可抗辩条款原封不动延续"],"这些条款会重新计算,是坏处,不会延续。"],
+["I","Under the Sum Assured Multiple rule, the minimum sum assured is calculated as",["(Annual premium − estimated rider premium) × SAM factor","(Annual premium + rider premium) × SAM factor","Annual premium × 125%","Account value × SAM factor"],"a","Take out the rider premium first, then multiply.","根据保额倍数规则,最低保额的计算是",["(年度保费 − 附加险估计保费)× SAM 倍数","(年度保费 + 附加险保费)× SAM 倍数","年度保费 × 125%","户口价值 × SAM 倍数"],"先扣除附加险保费,再乘倍数。"],
+["P","Storing hazardous chemicals in a factory is an example of",["Moral hazard","Physical hazard","Speculative risk","Fundamental risk"],"b","Physical = the property’s features. Moral = human attitude (e.g. dishonesty).","在工厂储存危险化学品是哪一种例子?",["道德风险","实质危险","投机风险","基本风险"],"实质 = 物件本身特征;道德 = 人的态度(如不诚实)。"],
+["I","Which describes the difference between a unit trust and a single premium ILP?",["Both have independent trustees","SP-ILP may have a minimum period and early-withdrawal penalty; unit trusts are highly liquid","Unit trusts include life cover","SP-ILP is supervised by the Securities Commission"],"b","SP-ILP is less liquid and includes life cover.","单位信托与单期保费 ILP 的区别是?",["两者都有独立受托人","SP-ILP 可能有最低年期和提前提款罚款;单位信托流动性高","单位信托包含人寿保障","SP-ILP 由证券委员会监管"],"SP-ILP 流动性较低,并含人寿保障。"]
+];
+const HOT=[
+["肯定有出 Sure to come out","Agency law, FSA 2013, types of risk, 15-day free look.","代理法则、2013年金融服务法令、风险种类、15天冷静期。"],
+["ILP 投资联结保单","Most asked. Policy owner bears investment risk. Only the sum assured is guaranteed. Units valued every business day. New fund offer period ≤ 2 months. Free-look 15 days.","最常考。投资风险由保单持有人承担。只有保额有保证。每个营业日估值。新基金发售期 ≤ 2 个月。冷静期 15 天。"],
+["SP-IL 单期保费","One lump sum, investment first. BSA usually 125% of single premium (team tip: 105% for older/high-risk). Upfront charge ≤ 5%; top-up charge 5%. COI on sum at risk = BSA − account value; stops when account value ≥ BSA.","一次性缴费,投资优先。基本保额通常是单期保费的 125%(团队提示:年长/高风险 105%)。预付费 ≤ 5%;加额收 5%。COI 按风险总额 = BSA − 户口价值收取;户口价值 ≥ BSA 时停止。"],
+["SAM 保额倍数","Minimum SA = (annual premium − rider premium) × SAM factor. Age 56+: factor 15. e.g. RM5,000 × 15 = RM75,000.","最低保额 =(年度保费 − 附加险保费)× 倍数。56 岁以上倍数 = 15。例:RM5,000 × 15 = RM75,000。"],
+["道德风险 vs 实质危险","Moral hazard = human attitude, e.g. dishonest employees. Physical hazard = physical features, e.g. chemicals, unguarded premises.","道德风险 = 人的态度,例如不诚实员工。实质危险 = 物质特征,例如化学品、无人看守场所。"],
+["纯风险 / 投机风险 / 基本风险","Pure: loss or no loss, insurable. Speculative: may gain, not insurable. Fundamental: affects society, government responsible. Particular: affects individuals.","纯风险:损失或无损失,可保。投机风险:可能获利,不可保。基本风险:影响社会,由政府负责。特定风险:影响个人。"],
+["取代1996年保险法","Financial Services Act 2013 replaced the Insurance Act 1996. Schedule 7 = prohibited conduct. Schedule 9 = 2-year non-contestability.","2013年金融服务法令取代1996年保险法令。附表7 = 禁止行为。附表9 = 2年不可争议。"],
+["代理法则 Agency law","Agents are appointed by express agreement. Ratification = agency formed after the act. Agency is NOT ended by the agent’s temporary absence. No instructions → follow market usage / customary practice.","代理员以明示协议委任。追认 = 事后成立的代理。代理员暂时缺席不会终止代理。没有指示 → 遵循市场惯例/习惯做法。"],
+["15天冷静期 Free-look","Return within 15 days of delivery: refund premium minus medical exam cost. Same for ILP. After 15 days (e.g. day 20): no refund.","交付后 15 天内退回:退还保费,扣除体检费。ILP 也一样。超过 15 天(例如第 20 天):不退款。"],
+["退保价值 Surrender value","Past-year answer: after 3 years of continuous premium. 10th edition: any time after inception if the policy provides a surrender value. Read the wording.","历年答案:连续缴费 3 年后。第10版:若保单提供退保价值,生效后任何时候。看清楚字眼。"],
+["失踪者 Missing person","Court can presume death after 7 years.","法院可在 7 年后推定死亡。"],
+["14岁可以自己投保吗?","Yes. Age 10–15 can insure own life (or another life with insurable interest) with parent/guardian’s written consent. 16+ can assign. ILP: 18+.","可以。10–15 岁经父母/监护人书面同意可为自己(或有保险利益的他人)投保。16 岁以上可转让保单。ILP:18 岁以上。"],
+["违反诚信 Breach of good faith","Contract becomes voidable. After 2 years, insurer can only avoid for deliberate non-disclosure (fraud) of a material fact.","契约变为可撤销。2 年后,只有故意不透露(欺诈)重要事实才可撤销。"],
+["MHIT 医疗与健康保险/回教保险","Cost-sharing ≤ lower of 20% (excl deductible) or RM3,000 (incl). HSI non-renewal notice: 30 days before anniversary. Women: higher morbidity.","费用分担 ≤ 20%(不含免赔额)或 RM3,000(含)较低者。住院手术不续保通知:周年日前 30 天。女性发病率较高。"],
+["扭曲 Twisting","Misleading a client to drop a policy and buy a new one. Detriments: qualifying periods restart, higher premium at attained age, initial costs paid twice, suicide and incontestable clauses restart.","误导客户放弃旧保单买新保单。坏处:等候期重来、按新年龄收更高保费、初始费用再付一次、自杀与不可抗辩条款重新计算。"],
+["CPD 时数","Life/ILP agent: 30 hours a year (team tip). General insurance agent: 20 hours a year.","寿险/ILP 代理员:每年 30 小时(团队提示)。普通保险代理员:每年 20 小时。"],
+["基金风险 高 → 低","Equity → managed → balanced → bond → cash. Lowest to highest by type: property → equity → derivatives.","股票 → 管理 → 平衡 → 债券 → 现金。按类型从低到高:房地产 → 股票 → 衍生工具。"],
+["死亡索赔与遗嘱认证","Death claim paid within 60 days of notice, or compound interest applies. Up to RM100,000 paid without probate. No nomination → executor/administrator.","死亡索赔须在通知后 60 天内支付,否则付复利。RM100,000 以内无需遗嘱认证。没有提名 → 遗嘱执行人/管理人。"],
+["PDPA 2010","Agents keep client info confidential under the Personal Data Protection Act 2010. Never share client info to get new business.","代理员须依照2010年个人资料保护法令为客户资料保密。绝不能分享客户资料来争取新业务。"]
+];
+Y24.forEach(y=>{Q.push(["Y24",y[0],y[1],y[2],y[3],y[4],y[8]||""]);ZH.push([y[5],y[6],y[7],y[9]||""])});
+TIP.forEach(y=>{Q.push(["TIP",y[0],y[1],y[2],y[3],y[4],y[8]||""]);ZH.push([y[5],y[6],y[7],y[9]||""])});
+const KEY="pcil_portal_v2";
+let st={done:{},wrong:{},lang:"both"};
+try{const s=localStorage.getItem(KEY);if(s)st=Object.assign(st,JSON.parse(s))}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+const app=document.getElementById("app"),L="ABCD",ids=Q.map((_,i)=>i);
+let run=null;
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+// bilingual text: en, zh -> html per language setting
+function bi(en,zh){const l=st.lang;if(l==="en"||!zh)return esc(en);if(l==="zh")return esc(zh);return esc(en)+`<span class="zh">${esc(zh)}</span>`}
+function bl(pair){return bi(pair[0],pair[1])}
+function plain(en,zh){return st.lang==="zh"?zh:(st.lang==="en"?en:en+" "+zh)}
+function langBar(cls){const o=[["both","双语"],["en","EN"],["zh","中文"]];return `<div class="lang ${cls||""}" role="group" aria-label="Language">${o.map(([k,t])=>`<button aria-pressed="${st.lang===k}" onclick="setLang('${k}')">${t}</button>`).join("")}</div>`}
+function setLang(k){st.lang=k;save();run?show():(cur?cur():home())}
+let cur=null;
+const HOTRE=/investment-linked|\bILP|single premium|SP-IL|top-up|moral hazard|physical hazard|pure risk|speculative|fundamental|Financial Services Act|FSA|Insurance Act|15 days|free-look|surrender|minor|good faith|medical and health|proximate|agency|ratification|CPD|twisting|PDPA|missing person|non-contest|more than 2|two years|Sum Assured Multiple|SAM/i;
+function srcN(k){return Q.filter(q=>q[0]===k).length}
+function home(){
+  run=null;cur=home;window.scrollTo(0,0);
+  const done=Object.keys(st.done).length,right=Object.values(st.done).filter(v=>v).length,wn=Object.keys(st.wrong).length;
+  const acc=done?Math.round(right/done*100)+"%":"–";
+  const hotN=ids.filter(i=>HOTRE.test(Q[i][2])).length;
+  const tile=(fn,ic,en,zh,sen,szh,hero)=>`<button class="tile${hero?" hero":""}" onclick="${fn}"><span class="ic">${ic}</span><span><b>${bi(en,zh)}</b><small>${bi(sen,szh)}</small></span></button>`;
+  const src=(k,ic)=>tile(`startSrc('${k}')`,ic,S[k][0],S[k][1],srcN(k)+" questions",srcN(k)+" 题");
+  app.innerHTML=`
+  <header class="mast"><p class="brand">Harvey’s Two Cents</p><h1>PCIL Exam Portal</h1><p>${bi(Q.length+" questions from past-year papers, the PCEIA & CEILLI textbooks and team tips.",Q.length+" 题,来自历年考题、PCEIA 与 CEILLI 课本及团队提示。")}</p>
+  <div class="stats"><div class="stat"><b>${done}</b><span>${bi("answered","已答")}</span></div><div class="stat"><b>${acc}</b><span>${bi("correct","正确率")}</span></div><div class="stat"><b>${wn}</b><span>${bi("to revisit","待重做")}</span></div></div>${langBar()}</header>
+  ${tile("startMock()","⏱","Mock exam","模拟考试","50 random questions, 40% from past years","随机 50 题,40% 来自历年考题",1)}
+  ${tile("startSrc('Y24')","★","2024 PCIL past-year paper","2024 历年考题","Full 120 questions in order","完整 120 题,按顺序")}
+  ${tile("startHot()","🎯","Hot-topic drill","必考题冲刺",hotN+" questions on topics that keep coming out",hotN+" 题,常考题型")}
+  ${tile("startWrong()","↺","Redo my wrong answers","重做错题",wn?wn+" waiting — the last push":"Nothing yet. Wrong answers collect here.",wn?wn+" 题待重做 — 最后冲刺":"暂时没有。答错的题会自动收集在这里。")}
+  ${tile("hot(0)","🔥","Hot topics flashcards","必考重点卡",HOT.length+" cards to memorise",HOT.length+" 张记忆卡")}
+  ${tile("tips()","💡","How to pass","考试攻略","Question mix and study plan","题型比例和读书计划")}
+  <h2>${bi("Past year papers","历年考题")}</h2>${src("Y24","24")}${src("P1","1")}${src("P2","2")}${src("P3","3")}
+  <h2>${bi("Textbook questions","课本练习题")}</h2>${src("PA","A")}${src("PC","C")}${src("IL","IL")}${src("TIP","✓")}
+  <h2>${bi("Practise by topic","按主题练习")}</h2><div class="chips">${Object.keys(T).map(k=>`<button class="chip" onclick="startTopic('${k}')">${bl(T[k])} (${Q.filter(q=>q[1]===k).length})</button>`).join("")}</div>
+  <p class="muted" style="margin-top:28px">${bi("Progress is saved on this phone only.","进度只保存在这部手机。")} <button class="chip" style="padding:6px 12px;font-size:14px" onclick="if(confirm('${plain("Clear all progress on this device?","清除这部手机上的所有进度?")}')){st.done={};st.wrong={};save();home()}">${bi("Reset progress","重设进度")}</button></p>`;
+}
+function begin(list,title){if(!list.length){home();return}run={list,title,i:0,picks:[],t0:Date.now()};show()}
+function startSrc(k){begin(ids.filter(i=>Q[i][0]===k),S[k])}
+function startTopic(k){begin(shuffle(ids.filter(i=>Q[i][1]===k)),T[k])}
+function startHot(){begin(shuffle(ids.filter(i=>HOTRE.test(Q[i][2]))).slice(0,50),["Hot-topic drill","必考题冲刺"])}
+function startWrong(){const w=Object.keys(st.wrong).map(Number);if(!w.length){alert(plain("No wrong answers yet. Do a paper first.","还没有错题,先做一份试卷吧。"));return}begin(shuffle(w),["Wrong answers","错题"])}
+function startMock(){const isPast=i=>/^(Y24|P1|P2|P3)$/.test(Q[i][0]);const past=shuffle(ids.filter(isPast)).slice(0,20);const rest=shuffle(ids.filter(i=>!past.includes(i))).slice(0,30);begin(shuffle(past.concat(rest)),["Mock exam","模拟考试"])}
+function optText(qi,k){const z=ZH[qi][1];return bi(Q[qi][3][k],z===0?"":z[k])}
+function show(){
+  const r=run,qi=r.list[r.i],q=Q[qi],z=ZH[qi],picked=r.picks[r.i];window.scrollTo(0,0);
+  const ans="abcd".indexOf(q[4]);
+  const opts=q[3].map((o,k)=>{let c="";if(picked!==undefined){if(k===ans)c="right";else if(k===picked)c="wrong"}return `<button class="opt ${c}" ${picked!==undefined?"disabled":""} onclick="pick(${k})"><span class="bub">${L[k]}</span><span>${optText(qi,k)}</span></button>`}).join("");
+  let fb="";
+  if(picked!==undefined){const ok=picked===ans;fb=`<div class="fb ${ok?"":"no"}"><h3>${ok?bi("Correct","答对了"):bi("Answer: "+L[ans],"答案:"+L[ans])}</h3><p>${bi(q[5],z[2])}</p>${q[6]?`<div class="note">⚠ ${bi(q[6],z[3])}</div>`:""}</div>`}
+  app.innerHTML=`<div class="bar"><div class="barrow"><button class="x" onclick="if(confirm('${plain("Leave this session?","离开这次练习?")}'))home()">✕ ${bi("Exit","退出")}</button><span class="count">${r.i+1} / ${r.list.length}</span></div><div class="track"><i style="width:${(r.i+(picked!==undefined?1:0))/r.list.length*100}%"></i></div></div>
+  ${langBar("in")}
+  <div class="tag">${bl(S[q[0]])}</div><p class="stem">${bi(q[2],z[0])}</p>${opts}${fb}
+  <div class="dock"><button ${picked===undefined?"disabled":""} onclick="next()">${r.i+1<r.list.length?plain("Next question","下一题"):plain("See my score","查看成绩")}</button></div>`;
+}
+function pick(k){const r=run,qi=r.list[r.i],ans="abcd".indexOf(Q[qi][4]);r.picks[r.i]=k;const ok=k===ans;st.done[qi]=ok;if(ok)delete st.wrong[qi];else st.wrong[qi]=1;save();show();setTimeout(()=>{const f=document.querySelector(".fb");if(f)f.scrollIntoView({behavior:"smooth",block:"center"})},50)}
+function next(){if(run.i+1<run.list.length){run.i++;show()}else result()}
+function result(){
+  const r=run;let right=0;const miss=[];
+  r.list.forEach((qi,n)=>{const a="abcd".indexOf(Q[qi][4]);if(r.picks[n]===a)right++;else miss.push([qi,r.picks[n]])});
+  const pct=Math.round(right/r.list.length*100),mins=Math.round((Date.now()-r.t0)/60000);
+  run=null;cur=null;window.scrollTo(0,0);
+  app.innerHTML=`<div class="score"><div class="muted">${bl(r.title)}</div><div class="big">${pct}%</div><p>${bi(right+" of "+r.list.length+" correct in "+mins+" min",r.list.length+" 题答对 "+right+" 题,用时 "+mins+" 分钟")}</p></div>
+  <h2>${miss.length?bi("Review these "+miss.length,"复习这 "+miss.length+" 题"):bi("Perfect paper","满分!")}</h2>
+  ${miss.map(([qi,p])=>{const q=Q[qi],a="abcd".indexOf(q[4]);return `<div class="rev">${bi(q[2],ZH[qi][0])}<div class="y">${bi("You chose","你选了")} ${p===undefined?"–":L[p]+". "+optText(qi,p)}</div><div class="a">${bi("Answer","答案")} ${L[a]}. ${optText(qi,a)}</div><div class="muted">${bi(q[5],ZH[qi][2])}</div></div>`}).join("")}
+  <div class="dock"><button onclick="home()">${plain("Back to home","返回主页")}</button></div>`;
+}
+function tips(){
+  cur=tips;window.scrollTo(0,0);
+  const mix=[["Past year question (reworded, same answer)","历年考题(换说法,答案一样)",40],["Logic question","逻辑题",20],["Concept: life, general, ILP, medical, law","概念题:寿险、普通保险、ILP、医疗、法律",20],["Memory question","记忆题",10],["Accounting knowledge","会计知识",9],["Calculation","计算题",1]];
+  const steps=[["Read the textbook first.","先读课本。","PCEIA Part A + Part C, and CEILLI. Skim once end to end.","PCEIA A 部 + C 部,以及 CEILLI。从头到尾先翻一遍。"],["Clear the 2024 paper and Past Year #1–3.","做完 2024 及历年 #1–3。","40% of the exam is past-year questions asked differently — learn the concept, not the letter.","40% 是历年题换说法——要懂概念,不是背答案字母。"],["Do the hot-topic drill and flashcards.","做必考题冲刺和重点卡。","ILP and SP-IL are asked the most.","ILP 和单期 ILP 最常考。"],["Last push: redo your wrong answers.","最后冲刺:重做错题。","Keep going until the list is empty, then flip back to the textbook for those chapters.","做到错题清零,再翻课本复习那些章节。"],["Take 2–3 mock exams the week before.","考前一周做 2–3 次模拟考试。","Watch out for ⚠ notes — those are where sources disagree.","留意 ⚠ 提示——那是资料互相矛盾的地方。"]];
+  app.innerHTML=`<div class="bar"><div class="barrow"><button class="x" onclick="home()">← ${bi("Home","主页")}</button><span class="count">${bi("How to pass","考试攻略")}</span></div></div>${langBar("in")}
+  <h2>${bi("Sure to come out","肯定有出")}</h2><div class="sure">${bi("Agency law · FSA 2013 · types of risk · 15-day free look · moral vs physical hazard · CPD hours · SP-IL 125% BSA","代理法则 · 2013年金融服务法令 · 风险种类 · 15天冷静期 · 道德风险 vs 实质危险 · CPD 时数 · 单期 ILP 保额 125%")}</div>
+  <h2>${bi("What the exam is made of","考试题型比例")}</h2>${mix.map(m=>`<div class="w"><div class="lab"><span>${bi(m[0],m[1])}</span><span>${m[2]}%</span></div><div class="t"><i style="width:${m[2]/40*100}%"></i></div></div>`).join("")}
+  <p class="muted">${bi("Based on our advisors’ exam experience.","根据团队顾问的考试经验。")}</p>
+  <h2>${bi("Study plan","读书计划")}</h2><ol class="steps">${steps.map(s=>`<li><b>${bi(s[0],s[1])}</b> ${bi(s[2],s[3])}</li>`).join("")}</ol>`;
+}
+let hi=0;
+function hot(i){
+  const n=HOT.length;hi=((i%n)+n)%n;cur=()=>hot(hi);const h=HOT[hi];window.scrollTo(0,0);
+  const body=st.lang==="en"?esc(h[1]):st.lang==="zh"?esc(h[2]):esc(h[1])+`<span class="zh" style="margin-top:12px">${esc(h[2])}</span>`;
+  app.innerHTML=`<div class="bar"><div class="barrow"><button class="x" onclick="home()">← ${bi("Home","主页")}</button><span class="count">${hi+1} / ${n}</span></div></div>${langBar("in")}
+  <button class="card" style="margin-top:12px" onclick="this.querySelector('.b').hidden=false;this.querySelector('.h').hidden=true"><div class="f">${esc(h[0])}</div><div class="b" hidden>${body}</div><div class="h">${bi("Tap to show answer","点击显示答案")}</div></button>
+  <div class="pair"><button onclick="hot(${hi-1})">← ${bi("Previous","上一张")}</button><button onclick="hot(${hi+1})">${bi("Next","下一张")} →</button></div>`;
+}
+home();
+</script>
+</body>
+</html>
